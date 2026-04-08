@@ -41,16 +41,15 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center group" aria-label="Clay Pot Home">
-            <Logo 
-              size={scrolled ? "sm" : "md"} 
-              variant={scrolled ? "default" : "light"}
-              className="transition-all duration-500"
+            <Logo
+              size={scrolled ? "sm" : "md"}
+              className="transition-all duration-500 rounded-lg overflow-hidden max-h-14"
             />
           </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
-            {NAV_LINKS.map((link) => {
+            {NAV_LINKS.filter(l => l.label !== "Contact").map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
@@ -153,7 +152,7 @@ export default function Header() {
               </button>
 
               <div className="flex flex-col gap-1 mb-8">
-                {NAV_LINKS.map((link, i) => (
+                {NAV_LINKS.filter(l => l.label !== "Contact").map((link, i) => (
                   <motion.div
                     key={link.href}
                     initial={{ x: 20, opacity: 0 }}

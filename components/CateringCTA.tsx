@@ -3,17 +3,19 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/ui/AnimatedSection";
+import { SITE } from "@/lib/data/site";
 
 const EVENT_TYPES = [
+  { icon: "🎂", label: "Birthday Parties" },
   { icon: "💼", label: "Office Lunches" },
-  { icon: "🎉", label: "Birthday Parties" },
-  { icon: "💍", label: "Weddings & Receptions" },
-  { icon: "🏢", label: "Corporate Events" },
   { icon: "👨‍👩‍👧‍👦", label: "Family Gatherings" },
-  { icon: "🎓", label: "Graduation Parties" },
+  { icon: "🎊", label: "Celebrations" },
 ];
 
 export default function CateringCTA() {
+  const waNumber = SITE.phoneRaw.replace(/\D/g, "");
+  const waLink = `https://wa.me/${waNumber}?text=Hi%20Clay%20Pot,%20I%20would%20like%20to%20inquire%20about%20catering.`;
+
   return (
     <section
       className="relative overflow-hidden section-padding"
@@ -40,32 +42,19 @@ export default function CateringCTA() {
               <div className="inline-flex items-center gap-2 mb-5">
                 <span className="h-px w-8 bg-saffron" />
                 <span className="text-saffron text-xs font-semibold tracking-[0.2em] uppercase">
-                  Catering Services
+                  Bring Clay Pot to You
                 </span>
               </div>
 
               <h2
-                className="text-4xl md:text-5xl font-bold text-charcoal mb-5 leading-tight"
+                className="text-4xl md:text-5xl font-black text-charcoal mb-5 leading-tight"
                 style={{ fontFamily: "var(--font-playfair)" }}
               >
-                Bringing Clay Pot
-                <br />
-                <span
-                  style={{
-                    background: "linear-gradient(135deg, #651F12, #8B2A18)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  To Your Event
-                </span>
+                Catering for Parties, Office Lunches & Special Events
               </h2>
 
-              <p className="text-charcoal/65 text-lg leading-relaxed mb-8">
-                From intimate office lunches to grand celebrations, our full-service catering
-                delivers the authentic Clay Pot experience to your venue. We handle everything —
-                from menu planning to setup.
+              <p className="text-charcoal/70 text-lg md:text-xl font-medium leading-relaxed mb-8">
+                Bring Clay Pot to your next event. From our massive signature Mandi platters to aromatic biryanis, classic curries, breads, and desserts — we deliver authentic Indian flavors that your guests will never forget. No event is too small or too large.
               </p>
 
               {/* Event type chips */}
@@ -73,9 +62,9 @@ export default function CateringCTA() {
                 {EVENT_TYPES.map((et) => (
                   <span
                     key={et.label}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium
-                      text-charcoal border border-charcoal/12 transition-all duration-200
-                      hover:border-saffron/50 hover:bg-saffron/8"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider
+                      text-charcoal border border-maroon/10 transition-all duration-200
+                      hover:border-saffron/50 hover:bg-saffron/10"
                     style={{ background: "rgba(255,255,255,0.7)" }}
                   >
                     {et.icon} {et.label}
@@ -83,23 +72,32 @@ export default function CateringCTA() {
                 ))}
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+                <a
+                  href={`tel:${SITE.phoneRaw}`}
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-black text-sm tracking-widest uppercase
+                    text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-glow-maroon bg-maroon shadow-lg"
+                >
+                  📞 Call for Catering
+                </a>
+                
+                <a
+                  href={waLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-black text-sm tracking-widest uppercase
+                    text-charcoal transition-all duration-300 hover:-translate-y-1 bg-[#25D366]/20 border border-[#25D366]/30 hover:bg-[#25D366]/30"
+                >
+                  Chat on WhatsApp
+                </a>
+
                 <Link
                   href="/catering"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold text-sm tracking-wide
-                    text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-glow-maroon"
-                  style={{ background: "linear-gradient(135deg, #651F12, #8B2A18)" }}
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-black text-sm tracking-widest uppercase
+                    border-2 border-saffron text-charcoal transition-all duration-300 hover:bg-saffron/10 hover:-translate-y-0.5"
                 >
-                  🎉 Explore Catering
+                  Request a Custom Quote
                 </Link>
-                <a
-                  href="tel:+17035550134"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-sm
-                    border-2 border-maroon text-maroon transition-all duration-300
-                    hover:bg-maroon hover:text-white hover:-translate-y-0.5"
-                >
-                  📞 Call to Inquire
-                </a>
               </div>
             </div>
           </AnimatedSection>
@@ -109,53 +107,56 @@ export default function CateringCTA() {
             <div className="grid grid-cols-2 gap-4">
               {[
                 {
-                  title: "50+",
-                  label: "Events Catered",
-                  desc: "From intimate to grand",
-                  icon: "🎊",
+                  title: "Signature",
+                  label: "Mandi Platters",
+                  desc: "Crowd favorites",
+                  icon: "🥘",
                   grad: "linear-gradient(135deg, #F4A300, #C9962B)",
                 },
                 {
-                  title: "100+",
-                  label: "Guest Capacity",
-                  desc: "Per event we can serve",
+                  title: "Any Size",
+                  label: "Group Catering",
+                  desc: "Intimate to grand",
                   icon: "👥",
                   grad: "linear-gradient(135deg, #651F12, #8B2A18)",
                 },
                 {
-                  title: "Full",
-                  label: "Service Included",
-                  desc: "Setup, serving & cleanup",
-                  icon: "✅",
+                  title: "Custom",
+                  label: "Event Menus",
+                  desc: "Tailored to your needs",
+                  icon: "📋",
                   grad: "linear-gradient(135deg, #2D0E05, #651F12)",
                 },
                 {
-                  title: "Custom",
-                  label: "Menus Available",
-                  desc: "Tailored to your event",
-                  icon: "📋",
+                  title: "Fast",
+                  label: "Quote Turnaround",
+                  desc: "Via WhatsApp & Phone",
+                  icon: "⚡",
                   grad: "linear-gradient(135deg, #7A5B1A, #C9962B)",
                 },
               ].map((stat, i) => (
                 <motion.div
                   key={stat.title}
-                  className="rounded-2xl p-5 text-white"
+                  className="rounded-2xl p-6 text-white flex flex-col justify-between"
                   style={{
                     background: stat.grad,
                     boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+                    aspectRatio: "1/1",
                   }}
-                  whileHover={{ y: -4, scale: 1.02 }}
+                  whileHover={{ y: -6, scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 300, damping: 22 }}
                 >
-                  <span className="text-2xl mb-2 block">{stat.icon}</span>
-                  <p
-                    className="text-3xl font-bold mb-0.5"
-                    style={{ fontFamily: "var(--font-playfair)" }}
-                  >
-                    {stat.title}
-                  </p>
-                  <p className="text-white/80 text-sm font-semibold">{stat.label}</p>
-                  <p className="text-white/55 text-xs mt-1">{stat.desc}</p>
+                  <span className="text-3xl mb-auto">{stat.icon}</span>
+                  <div>
+                    <p
+                      className="text-2xl sm:text-3xl font-black mb-1 leading-none"
+                      style={{ fontFamily: "var(--font-playfair)" }}
+                    >
+                      {stat.title}
+                    </p>
+                    <p className="text-white/90 text-sm font-bold uppercase tracking-wider">{stat.label}</p>
+                    <p className="text-white/60 text-xs mt-1 font-medium">{stat.desc}</p>
+                  </div>
                 </motion.div>
               ))}
             </div>

@@ -89,10 +89,64 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="bg-cream font-inter antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Restaurant",
+              "name": SITE.fullName,
+              "image": `${SITE.url}/images/restaurant-interior.png`,
+              "@id": SITE.url,
+              "url": SITE.url,
+              "telephone": SITE.phoneRaw,
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "3065 Centreville Rd, Suite G",
+                "addressLocality": "Centreville",
+                "addressRegion": "VA",
+                "postalCode": "20120",
+                "addressCountry": "US"
+              },
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 38.8481,
+                "longitude": -77.4363
+              },
+              "servesCuisine": "Indian",
+              "openingHoursSpecification": SITE.hours.map(h => ({
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": h.day,
+                "opens": h.hours.split(" – ")[0],
+                "closes": h.hours.split(" – ")[1]
+              })),
+              "menu": `${SITE.url}/menu`,
+              "acceptsReservations": "true"
+            })
+          }}
+        />
         <PromoBar />
         <Header />
         <main>{children}</main>
         <Footer />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').then(
+                    function(registration) {
+                      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    },
+                    function(err) {
+                      console.log('ServiceWorker registration failed: ', err);
+                    }
+                  );
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );

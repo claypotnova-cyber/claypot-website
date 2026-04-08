@@ -3,8 +3,9 @@ import { SITE } from "@/lib/data/site";
 import Hero from "@/components/Hero";
 import TrustStrip from "@/components/TrustStrip";
 import PromotionsSection from "@/components/PromotionsSection";
+import SignatureMandi from "@/components/SignatureMandi";
+import DineInPromo from "@/components/DineInPromo";
 import FeaturedDishes from "@/components/FeaturedDishes";
-import AboutPreview from "@/components/AboutPreview";
 import CateringCTA from "@/components/CateringCTA";
 import Testimonials from "@/components/Testimonials";
 import GalleryStrip from "@/components/GalleryStrip";
@@ -26,28 +27,31 @@ export default function HomePage() {
       {/* 1. Hero */}
       <Hero />
 
-      {/* 2. Trust Strip (floats over hero) */}
-      <TrustStrip />
+      {/* 2. Signature Mandi Specials */}
+      <SignatureMandi />
 
-      {/* 3. Promotions */}
+      {/* 3. Trust Strip (floats between sections) */}
+      <TrustStrip />
+      
+      {/* 4. Promotions */}
       <PromotionsSection />
 
-      {/* 4. Featured Dishes */}
-      <FeaturedDishes />
-
-      {/* 5. About Preview */}
-      <AboutPreview />
+      {/* 5. Dine-in Experience Promo */}
+      <DineInPromo />
 
       {/* 6. Catering CTA */}
       <CateringCTA />
 
-      {/* 7. Testimonials */}
+      {/* 7. Featured Dishes (General Menu Extracted) */}
+      <FeaturedDishes />
+
+      {/* 8. Testimonials */}
       <Testimonials />
 
-      {/* 8. Gallery */}
+      {/* 9. Gallery */}
       <GalleryStrip />
 
-      {/* 9. Visit Us */}
+      {/* 10. Visit Us */}
       <VisitSection />
     </>
   );
