@@ -1,26 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { ORDER_ONLINE_URL } from "@/lib/data/navigation";
 
-// ── Animated counter hook ────────────────────────────────────────────────────
-function useCounter(target: number, duration = 2000, start = false) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!start) return;
-    let startTime: number | null = null;
-    const step = (ts: number) => {
-      if (!startTime) startTime = ts;
-      const progress = Math.min((ts - startTime) / duration, 1);
-      setCount(Math.floor(progress * target));
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [start, target, duration]);
-  return count;
-}
 
 // ── Category panels ──────────────────────────────────────────────────────────
 const CATEGORIES = [
@@ -57,14 +41,6 @@ const CATEGORIES = [
     ctaLabel: "View Curries",
     badge: "Chef's Pick",
   },
-];
-
-// ── Stats ────────────────────────────────────────────────────────────────────
-const STATS = [
-  { value: 60,  suffix: "+",  label: "Menu Items" },
-  { value: 5,   suffix: "★",  label: "Google Rating" },
-  { value: 100, suffix: "%",  label: "Fresh Daily" },
-  { value: 10,  suffix: "+",  label: "Mandi Varieties" },
 ];
 
 // ── Category Card ────────────────────────────────────────────────────────────
@@ -165,42 +141,6 @@ function CategoryCard({ cat, index }: { cat: typeof CATEGORIES[0]; index: number
   );
 }
 
-// ── Stats counter row ────────────────────────────────────────────────────────
-function StatsRow() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
-  const c0 = useCounter(STATS[0].value, 1800, inView);
-  const c1 = useCounter(STATS[1].value, 1200, inView);
-  const c2 = useCounter(STATS[2].value, 1500, inView);
-  const c3 = useCounter(STATS[3].value, 1600, inView);
-  const counts = [c0, c1, c2, c3];
-
-  return (
-    <div
-      ref={ref}
-      className="grid grid-cols-2 md:grid-cols-4 gap-px overflow-hidden rounded-2xl"
-      style={{ background: "rgba(244,163,0,0.12)", border: "1px solid rgba(244,163,0,0.15)" }}
-    >
-      {STATS.map((s, i) => (
-        <motion.div
-          key={s.label}
-          className="flex flex-col items-center justify-center py-8 px-4 bg-cream"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: i * 0.1, duration: 0.6 }}
-        >
-          <span className="text-4xl md:text-5xl font-black text-maroon font-playfair leading-none">
-            {counts[i]}{s.suffix}
-          </span>
-          <span className="text-maroon/50 text-xs font-black uppercase tracking-[0.2em] mt-2">
-            {s.label}
-          </span>
-        </motion.div>
-      ))}
-    </div>
-  );
-}
 
 // ── Main export ──────────────────────────────────────────────────────────────
 export default function SignatureMandi() {
@@ -229,10 +169,7 @@ export default function SignatureMandi() {
           ))}
         </div>
 
-        {/* Animated stats row */}
-        <StatsRow />
-
-      </div>
+</div>
     </section>
   );
 }

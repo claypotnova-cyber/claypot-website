@@ -32,7 +32,14 @@ const colorMap = {
   },
 };
 
+// Only show active dine-in and pickup promotions in this section
+const ACTIVE_PROMOS = PROMOTIONS.filter(
+  (p) => p.active && (p.promotionType === "dine-in" || p.promotionType === "pickup")
+);
+
 export default function PromotionsSection() {
+  if (ACTIVE_PROMOS.length === 0) return null;
+
   return (
     <section className="section-padding" aria-label="Current promotions">
       <div className="max-w-7xl mx-auto">
@@ -58,12 +65,12 @@ export default function PromotionsSection() {
         </AnimatedSection>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {PROMOTIONS.map((promo, i) => {
+          {ACTIVE_PROMOS.map((promo, i) => {
             const colors = colorMap[promo.color];
             return (
               <AnimatedSection key={promo.id} delay={i * 0.12} direction="up">
                 <motion.div
-                  className="relative rounded-2xl overflow-hidden cursor-default perspective-1000"
+                  className="relative rounded-2xl overflow-hidden cursor-default flex flex-col"
                   style={{
                     background: colors.gradient,
                     boxShadow: `0 8px 32px ${colors.glow}, 0 2px 8px rgba(0,0,0,0.15)`,
@@ -80,12 +87,11 @@ export default function PromotionsSection() {
                   <div
                     className="absolute inset-0 opacity-20 pointer-events-none"
                     style={{
-                      background:
-                        "linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%)",
+                      background: "linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%)",
                     }}
                   />
 
-                  <div className="relative p-7 flex flex-col h-full min-h-[280px]">
+                  <div className="relative p-7 flex flex-col flex-1 min-h-[280px]">
                     {/* Icon + Badge row */}
                     <div className="flex items-start justify-between mb-5">
                       <span className="text-4xl">{promo.icon}</span>
@@ -110,7 +116,7 @@ export default function PromotionsSection() {
                     >
                       {promo.title}
                     </h3>
-                    <p className="text-white/70 text-sm leading-relaxed mb-6 flex-1">
+                    <p className="text-white/70 text-sm leading-relaxed mb-4 flex-1">
                       {promo.description}
                     </p>
 
@@ -122,11 +128,8 @@ export default function PromotionsSection() {
                         rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-full
                           font-semibold text-sm tracking-wide transition-all duration-300
-                          hover:opacity-90 hover:-translate-y-0.5 focus:outline-none focus:ring-2"
-                        style={{
-                          background: colors.btn,
-                          color: colors.btnText,
-                        }}
+                          hover:opacity-90 hover:-translate-y-0.5 focus:outline-none focus:ring-2 mb-3"
+                        style={{ background: colors.btn, color: colors.btnText }}
                       >
                         {promo.ctaLabel}
                       </a>
@@ -135,15 +138,17 @@ export default function PromotionsSection() {
                         href={promo.ctaHref}
                         className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-full
                           font-semibold text-sm tracking-wide transition-all duration-300
-                          hover:opacity-90 hover:-translate-y-0.5 focus:outline-none focus:ring-2"
-                        style={{
-                          background: colors.btn,
-                          color: colors.btnText,
-                        }}
+                          hover:opacity-90 hover:-translate-y-0.5 focus:outline-none focus:ring-2 mb-3"
+                        style={{ background: colors.btn, color: colors.btnText }}
                       >
                         {promo.ctaLabel}
                       </Link>
                     )}
+
+                    {/* Disclaimer */}
+                    <p className="text-white/40 text-[10px] italic leading-snug">
+                      {promo.applicability}. {promo.disclaimer}
+                    </p>
                   </div>
                 </motion.div>
               </AnimatedSection>

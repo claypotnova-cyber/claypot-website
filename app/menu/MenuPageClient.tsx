@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MENU_ITEMS, MENU_CATEGORIES } from "@/lib/data/menu";
 import { SITE } from "@/lib/data/site";
 

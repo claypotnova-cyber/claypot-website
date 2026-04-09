@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { SITE } from "@/lib/data/site";
 import Hero from "@/components/Hero";
-import TrustStrip from "@/components/TrustStrip";
 import PromotionsSection from "@/components/PromotionsSection";
 import SignatureMandi from "@/components/SignatureMandi";
 import DineInPromo from "@/components/DineInPromo";
 import FeaturedDishes from "@/components/FeaturedDishes";
 import CateringCTA from "@/components/CateringCTA";
+import ComboBuilder from "@/components/ComboBuilder";
 import Testimonials from "@/components/Testimonials";
 import GalleryStrip from "@/components/GalleryStrip";
 import VisitSection from "@/components/VisitSection";
+import SpinWheel from "@/components/SpinWheel";
 
 export const metadata: Metadata = {
   title: `${SITE.fullName} | Authentic Indian Dining in Centreville, VA`,
@@ -30,19 +31,19 @@ export default function HomePage() {
       {/* 2. Signature Mandi Specials */}
       <SignatureMandi />
 
-      {/* 3. Trust Strip (floats between sections) */}
-      <TrustStrip />
-      
-      {/* 4. Promotions */}
+      {/* 3. Promotions (dine-in & pickup only) */}
       <PromotionsSection />
 
-      {/* 5. Dine-in Experience Promo */}
+      {/* 4. Dine-in Experience Promo */}
       <DineInPromo />
+
+      {/* 5. Combo Builder (meal discovery) */}
+      <ComboBuilder />
 
       {/* 6. Catering CTA */}
       <CateringCTA />
 
-      {/* 7. Featured Dishes (General Menu Extracted) */}
+      {/* 7. Featured Dishes */}
       <FeaturedDishes />
 
       {/* 8. Testimonials */}
@@ -53,6 +54,9 @@ export default function HomePage() {
 
       {/* 10. Visit Us */}
       <VisitSection />
+
+      {/* Floating spin wheel (dine-in & pickup rewards only) */}
+      <SpinWheel />
     </>
   );
 }

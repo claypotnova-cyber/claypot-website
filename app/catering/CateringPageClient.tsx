@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import { SITE } from "@/lib/data/site";
+import CateringPromos from "@/components/CateringPromos";
 
 // ─── Catering Menu Data (no prices) ──────────────────────────────────────────
 
@@ -154,6 +155,16 @@ export default function CateringPageClient() {
         </div>
       </section>
 
+      {/* ── Catering Promo Cards ─────────────────────────────────────────────── */}
+      <CateringPromos placement="catering-cards" />
+
+      {/* ── Large Event Highlight Banner ──────────────────────────────────────── */}
+      <div className="px-4 md:px-8 pb-4 bg-cream">
+        <div className="max-w-7xl mx-auto">
+          <CateringPromos placement="catering-highlight" />
+        </div>
+      </div>
+
       {/* ── Catering Menu Categories ──────────────────────────────────────────── */}
       <section className="py-20 px-4 md:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
@@ -180,7 +191,6 @@ export default function CateringPageClient() {
                     <span className="text-2xl">{tray.icon}</span>
                     <div className="text-left">
                       <p className="text-maroon font-black text-sm uppercase tracking-wide">{tray.size}</p>
-                      <p className="text-maroon/50 text-xs font-medium">{tray.guests}</p>
                     </div>
                   </div>
                 ))}
@@ -338,6 +348,9 @@ export default function CateringPageClient() {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* ── Final Catering Banner before inquiry ─────────────────────────────── */}
+      <CateringPromos placement="catering-banner" />
 
       {/* ── Inquiry Form ─────────────────────────────────────────────────────── */}
       <section id="inquiry" className="py-20 px-4 md:px-8 bg-white">
