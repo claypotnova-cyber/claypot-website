@@ -100,7 +100,7 @@ export default function AboutPage() {
                 <div className="relative h-80 md:h-[460px] rounded-2xl overflow-hidden"
                   style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.2), 0 0 0 1px rgba(244,163,0,0.1)" }}>
                   <Image
-                    src="/images/real-interior.jpg"
+                    src="/images/real-bar-2.jpg"
                     alt="Clay Pot elegant interior dining room"
                     fill
                     className="object-cover"
@@ -234,36 +234,35 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Gallery moments */}
-      <section className="section-padding bg-cream">
-        <div className="max-w-7xl mx-auto">
+      {/* Catering & Dine-In */}
+      <section className="section-padding bg-cream text-center">
+        <div className="max-w-4xl mx-auto">
           <AnimatedSection>
-            <div className="text-center mb-10">
-              <h2 className="text-4xl font-bold text-charcoal"
-                style={{ fontFamily: "var(--font-playfair)" }}>
-                A Glimpse Inside
-              </h2>
+            <div className="inline-flex items-center gap-2 mb-4">
+              <span className="h-px w-8 bg-saffron" />
+              <span className="text-saffron text-xs font-semibold tracking-[0.2em] uppercase">
+                Visit or Host
+              </span>
+              <span className="h-px w-8 bg-saffron" />
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-charcoal mb-6"
+              style={{ fontFamily: "var(--font-playfair)" }}>
+              Dine-In & Catering in NOVA
+            </h2>
+            <p className="text-charcoal/70 text-lg leading-relaxed mb-6">
+              Whether you are joining us for an intimate dinner, catching up with friends at our vibrant bar, or planning a momentous celebration, Clay Pot is here to make your experience unforgettable. Our spacious dining area and welcoming atmosphere are perfect for any occasion.
+            </p>
+            <p className="text-charcoal/70 text-lg leading-relaxed mb-8">
+              Planning a larger event? We offer premier catering services across Northern Virginia (NOVA) and the DMV area. From corporate office lunches to grand weddings, custom tray orders, and live chaat stations, our catering team brings the rich, authentic flavors of Indian cuisine straight to your guests.
+            </p>
+            <div className="flex justify-center">
+              <Link href="/catering"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-charcoal transition-all hover:-translate-y-1 hover:shadow-glow"
+                style={{ background: "linear-gradient(135deg, #F4A300, #C9962B)" }}>
+                ✨ View Catering Packages
+              </Link>
             </div>
           </AnimatedSection>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[
-              { src: "/images/real-interior.jpg", alt: "Elegant dining room" },
-              { src: "/images/dish-butter-chicken.png", alt: "Butter Chicken" },
-              { src: "/images/dish-biryani.png", alt: "Dum Biryani" },
-              { src: "/images/dish-tandoori.png", alt: "Tandoori Chicken" },
-              { src: "/images/dish-palak-paneer.png", alt: "Palak Paneer" },
-              { src: "/images/dish-mango-lassi.png", alt: "Mango Lassi" },
-            ].map((img, i) => (
-              <AnimatedSection key={img.src} delay={i * 0.06} direction="up">
-                <div className="relative h-48 md:h-60 rounded-xl overflow-hidden group"
-                  style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.1)" }}>
-                  <Image src={img.src} alt={img.alt} fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    sizes="(max-width: 640px) 50vw, 33vw" />
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
         </div>
       </section>
 
