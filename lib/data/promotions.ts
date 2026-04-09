@@ -324,6 +324,6 @@ export const PROMO_BAR_MESSAGES = [
   "🌞 Lunch Specials Mon–Fri · Dine-In & Pickup · 11:30AM–3PM",
   "🎉 Full-Service Catering — Corporate, Weddings & Private Events",
   "🍹 Happy Hour Daily 4–7PM · Dine-In Lounge Specials",
-  "📍 Now Open in Centreville, VA · Dine-In, Pickup & Catering",
+  "📍 Herndon, VA's newest excuse to skip cooking · Dine-In, Pickup & Catering",
   "✨ Weekend Chef's Special — Reserve Your Table Today",
 ];

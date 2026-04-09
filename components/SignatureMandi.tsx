@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ORDER_ONLINE_URL } from "@/lib/data/navigation";
@@ -65,11 +66,12 @@ function CategoryCard({ cat, index }: { cat: typeof CATEGORIES[0]; index: number
         className="absolute inset-0 scale-110"
         style={{ y: imgY }}
       >
-        <img
+        <Image
           src={cat.img}
           alt={cat.label}
-          className="w-full h-full object-cover"
-          loading="lazy"
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, 33vw"
         />
       </motion.div>
 

@@ -1,57 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import { SITE } from "@/lib/data/site";
 import CateringPromos from "@/components/CateringPromos";
+import CateringPerks from "@/components/CateringPerks";
 
-// ─── Catering Menu Data (no prices) ──────────────────────────────────────────
-
-const CATERING_MENU = [
-  {
-    id: "appetizers",
-    icon: "🥗",
-    label: "Appetizers",
-    veg: ["Veg Pakora", "Gobi 65", "Paneer 65"],
-    nonVeg: ["Chicken 65", "Chilli Chicken", "Bang Bang Shrimp", "Baby Goat Sukka"],
-  },
-  {
-    id: "curries",
-    icon: "🍲",
-    label: "Curries",
-    veg: ["Paneer Butter Masala", "Kadai Paneer", "Dal Tadka", "Veg Kurma"],
-    nonVeg: ["Butter Chicken", "Chicken Tikka Masala", "Chettinad Chicken", "Gongura Chicken"],
-  },
-  {
-    id: "biryanis",
-    icon: "🍚",
-    label: "Biryanis",
-    veg: ["Veg Dum Biryani", "Paneer Biryani"],
-    nonVeg: ["Chicken Dum Biryani", "Boneless Chicken Biryani", "Goat Dum Biryani", "Gongura Chicken Biryani", "Shrimp Biryani"],
-  },
-  {
-    id: "breads",
-    icon: "🫓",
-    label: "Breads",
-    veg: ["Butter Naan", "Garlic Naan", "Tandoori Roti", "Parota"],
-    nonVeg: [],
-  },
-  {
-    id: "sides",
-    icon: "🥣",
-    label: "Sides",
-    veg: ["White Rice", "Biryani Rice", "Raita", "Salad"],
-    nonVeg: [],
-  },
-  {
-    id: "desserts",
-    icon: "🍮",
-    label: "Desserts",
-    veg: ["Gulab Jamun", "Rasmalai", "Double Ka Meetha", "Apricot Delight"],
-    nonVeg: [],
-  },
-];
+import { CATERING_MENU } from "@/lib/data/catering";
 
 const HIGHLIGHTS = [
   { icon: "✏️", title: "Customizable Menu", desc: "Tailor every dish to your event's needs and preferences" },
@@ -155,6 +112,9 @@ export default function CateringPageClient() {
         </div>
       </section>
 
+      {/* ── Catering Perks ───────────────────────────────────────────────────── */}
+      <CateringPerks />
+
       {/* ── Catering Promo Cards ─────────────────────────────────────────────── */}
       <CateringPromos placement="catering-cards" />
 
@@ -180,15 +140,22 @@ export default function CateringPageClient() {
               {/* Tray Sizes */}
               <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-2xl mx-auto">
                 {[
-                  { size: "Small Tray", guests: "10–20 guests", icon: "🥘" },
-                  { size: "Medium Tray", guests: "25–40 guests", icon: "🍲" },
-                  { size: "Large Tray", guests: "50–80 guests", icon: "🫕" },
+                  { size: "Small Tray", guests: "10–20 guests", image: "/images/small-tray.png" },
+                  { size: "Medium Tray", guests: "25–40 guests", image: "/images/medium-tray.png" },
+                  { size: "Large Tray", guests: "50–80 guests", image: "/images/large-tray.png" },
                 ].map((tray) => (
                   <div
                     key={tray.size}
-                    className="flex-1 flex items-center gap-3 px-5 py-4 rounded-xl bg-maroon/5 border border-maroon/10"
+                    className="flex-1 flex items-center gap-4 px-5 py-3 rounded-xl bg-maroon/5 border border-maroon/10"
                   >
-                    <span className="text-2xl">{tray.icon}</span>
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden shadow-sm shrink-0 border border-maroon/10">
+                      <Image
+                        src={tray.image}
+                        alt={tray.size}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     <div className="text-left">
                       <p className="text-maroon font-black text-sm uppercase tracking-wide">{tray.size}</p>
                     </div>
@@ -215,7 +182,14 @@ export default function CateringPageClient() {
                 >
                   {/* Category heading */}
                   <div className="flex items-center gap-4 mb-6 pb-4 border-b border-maroon/10">
-                    <span className="text-4xl">{cat.icon}</span>
+                    <div className="relative w-16 h-16 rounded-full overflow-hidden shadow-md shrink-0 border border-saffron/30">
+                      <Image
+                        src={cat.image}
+                        alt={cat.label}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     <h3 className="text-2xl font-extrabold text-maroon font-playfair">
                       {cat.label}
                     </h3>

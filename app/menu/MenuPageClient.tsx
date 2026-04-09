@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { MENU_ITEMS, MENU_CATEGORIES } from "@/lib/data/menu";
 import { SITE } from "@/lib/data/site";
 
-const ORDER_ONLINE_URL = "https://order.toasttab.com/online/clay-pot-3065-centerville-rd-ste-g";
+const ORDER_ONLINE_URL = SITE.toastOrderUrl;
 
 
 export default function MenuPageClient() {

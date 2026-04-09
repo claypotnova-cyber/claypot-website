@@ -22,17 +22,16 @@ export default function DineInPromo() {
               <div className="flex flex-col gap-4 pt-12">
                 <div className="relative flex-grow rounded-3xl overflow-hidden shadow-2xl shadow-maroon/10">
                   <Image 
-                    src="/images/restaurant-interior.png" 
-                    alt="Clay Pot Dining Room" 
+                    src="/images/real-curry-naan.jpg" 
+                    alt="Butter chicken and curry with garlic naan at Clay Pot" 
                     fill 
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-maroon/10 mix-blend-overlay" />
                 </div>
                 <div className="relative h-48 rounded-3xl overflow-hidden shadow-2xl shadow-maroon/10">
                   <Image 
-                    src="/images/dish-biryani.png" 
-                    alt="Mandi Platter" 
+                    src="/images/real-drinks.jpg" 
+                    alt="Colorful mocktails and signature drinks at Clay Pot Bar" 
                     fill 
                     className="object-cover"
                   />
@@ -41,16 +40,16 @@ export default function DineInPromo() {
               <div className="flex flex-col gap-4 pb-12">
                 <div className="relative h-56 rounded-3xl overflow-hidden shadow-2xl shadow-maroon/10">
                   <Image 
-                    src="/images/dish-butter-chicken.png" 
-                    alt="Signature Curry" 
+                    src="/images/real-bar-1.jpg" 
+                    alt="Clay Pot bar interior with full spirits selection" 
                     fill 
                     className="object-cover"
                   />
                 </div>
                 <div className="relative flex-grow rounded-3xl overflow-hidden shadow-2xl shadow-maroon/10">
                   <Image 
-                    src="/images/dish-tandoori.png" 
-                    alt="Family Dining" 
+                    src="/images/real-mandi-yellow.jpg" 
+                    alt="Massive signature Mandi platter at Clay Pot" 
                     fill 
                     className="object-cover"
                   />

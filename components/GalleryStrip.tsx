@@ -6,34 +6,34 @@ import AnimatedSection from "@/components/ui/AnimatedSection";
 
 const GALLERY_IMAGES = [
   {
-    src: "/images/dish-butter-chicken.png",
-    alt: "Clay Pot signature Butter Chicken in copper bowl",
-    label: "Butter Chicken",
+    src: "/images/real-cocktails.jpg",
+    alt: "Colorful cocktails on a tray at Clay Pot bar",
+    label: "Signature Cocktails",
   },
   {
-    src: "/images/restaurant-interior.png",
-    alt: "Clay Pot elegant dining room ambiance",
-    label: "Dining Room",
+    src: "/images/real-chaat.jpg",
+    alt: "Clay Pot chaat starter with a drink",
+    label: "Chaat Starter",
   },
   {
-    src: "/images/dish-biryani.png",
-    alt: "Aromatic Dum Biryani in ornate copper handi",
-    label: "Dum Biryani",
+    src: "/images/real-mandi.jpg",
+    alt: "Hyderabadi Mandi platter with chicken and raita",
+    label: "Mandi Platter",
   },
   {
-    src: "/images/dish-tandoori.png",
-    alt: "Tandoori Chicken platter with clay plate",
-    label: "Tandoori Chicken",
+    src: "/images/real-samosa.jpg",
+    alt: "Crispy samosas with green chutney and tamarind",
+    label: "Samosas",
   },
   {
-    src: "/images/dish-palak-paneer.png",
-    alt: "Creamy Palak Paneer in white bowl",
-    label: "Palak Paneer",
+    src: "/images/real-bar-2.jpg",
+    alt: "Clay Pot bar with full liquor selection",
+    label: "The Bar",
   },
   {
-    src: "/images/dish-mango-lassi.png",
-    alt: "Mango Lassi in copper mug with saffron",
-    label: "Mango Lassi",
+    src: "/images/real-curry-naan.jpg",
+    alt: "Butter chicken and curry with garlic naan",
+    label: "Curry & Naan",
   },
 ];
 

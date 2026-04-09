@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import { SITE } from "@/lib/data/site";
 import { ORDER_ONLINE_URL } from "@/lib/data/navigation";
@@ -14,7 +12,7 @@ export default function ContactPageClient() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);

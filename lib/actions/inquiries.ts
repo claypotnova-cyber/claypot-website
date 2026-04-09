@@ -1,7 +1,5 @@
 "use server";
 
-import { SITE } from "@/lib/data/site";
-
 export type CateringFormData = {
   name: string;
   email: string;
@@ -24,14 +22,9 @@ export type ContactFormData = {
  * In a production environment, this would send an email via Resend/SendGrid 
  * or save the inquiry to a database like Supabase.
  */
-export async function submitCateringInquiry(data: CateringFormData) {
-  console.log("Catering Inquiry Received:", data);
-
-  // Simulation of a delay (e.g., API call)
+export async function submitCateringInquiry(_data: CateringFormData) {
+  // TODO: Integrate with Resend/SendGrid for email notifications
   await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // TODO: Integrate with Resend for email notifications:
-  // const { data, error } = await resend.emails.send({ ... });
 
   return { 
     success: true, 
@@ -42,8 +35,7 @@ export async function submitCateringInquiry(data: CateringFormData) {
 /**
  * Handles general contact form submissions.
  */
-export async function submitContactForm(data: ContactFormData) {
-  console.log("Contact Form Submission:", data);
+export async function submitContactForm(_data: ContactFormData) {
 
   await new Promise((resolve) => setTimeout(resolve, 800));
 

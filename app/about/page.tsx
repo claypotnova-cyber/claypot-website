@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import AnimatedSection from "@/components/ui/AnimatedSection";
-import { SITE } from "@/lib/data/site";
 import { ORDER_ONLINE_URL } from "@/lib/data/navigation";
 
 export const metadata: Metadata = {
@@ -43,7 +42,7 @@ const TIMELINE = [
   {
     year: "The Restaurant Opens",
     title: "Doors in Centreville",
-    desc: "We opened our doors at 3065 Centreville Rd, Suite G — and the neighborhood quickly embraced us. The aromas, the warmth, the community.",
+    desc: "We opened our doors at 3061 Centreville Rd, Herndon — and the neighborhood quickly embraced us. The aromas, the warmth, the community.",
   },
   {
     year: "The Bar & Lounge",

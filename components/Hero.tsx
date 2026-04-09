@@ -1,13 +1,29 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { ORDER_ONLINE_URL } from "@/lib/data/navigation";
 import { SITE } from "@/lib/data/site";
 
+const bgImages = [
+  "/images/dish-mandi-platter-hero.png",
+  "/images/restaurant-interior.png",
+  "/images/real-bar-1.jpg",
+  "/images/real-bar-2.jpg",
+];
+
 export default function Hero() {
+  const [currentBg, setCurrentBg] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentBg((prev) => (prev + 1) % bgImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   const heroRef = useRef<HTMLElement>(null);
   const { scrollY } = useScroll();
   const imageY = useTransform(scrollY, [0, 600], [0, 80]);
@@ -44,17 +60,22 @@ export default function Hero() {
 
       {/* Background image with parallax */}
       <motion.div
-        className="absolute inset-0 z-[1]"
+        className="absolute inset-0 z-[1] bg-[#1A0801]"
         style={{ y: imageY }}
       >
-        <Image
-          src="/images/dish-mandi-platter-hero.png"
-          alt="Clay Pot Signature Mandi Platter"
-          fill
-          priority
-          quality={90}
-          className="object-cover object-center scale-105"
-        />
+        {bgImages.map((src, idx) => (
+          <Image
+            key={src}
+            src={src}
+            alt={`Clay Pot background ${idx + 1}`}
+            fill
+            priority={idx === 0}
+            quality={90}
+            className={`object-cover object-center scale-105 transition-opacity duration-[1500ms] ease-in-out ${
+              idx === currentBg ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
+          />
+        ))}
       </motion.div>
 
       {/* Dark-to-transparent left overlay so text is readable */}
@@ -111,7 +132,7 @@ export default function Hero() {
               className="text-[10px] sm:text-xs font-black tracking-[0.2em] uppercase"
               style={{ color: "#F4A300" }}
             >
-              Herndon's Favorite Spot for Authentic Flavors
+              Herndon&apos;s Favorite Spot for Authentic Flavors
             </span>
           </motion.div>
 

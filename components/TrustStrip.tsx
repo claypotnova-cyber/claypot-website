@@ -2,13 +2,15 @@
 
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import { motion } from "framer-motion";
+import { ORDER_ONLINE_URL } from "@/lib/data/navigation";
+import { SITE } from "@/lib/data/site";
 
 const TRUST_ITEMS = [
   {
     icon: "🍽️",
     title: "Online Ordering",
     desc: "Order from anywhere via Toast",
-    href: "https://order.toasttab.com/online/clay-pot-3065-centerville-rd-ste-g",
+    href: ORDER_ONLINE_URL,
     external: true,
   },
   {
@@ -27,9 +29,9 @@ const TRUST_ITEMS = [
   },
   {
     icon: "📍",
-    title: "Centreville, VA",
-    desc: "3065 Centreville Rd, Suite G",
-    href: "https://maps.google.com/?q=3065+Centreville+Rd+Suite+G+Centreville+VA+20120",
+    title: "Herndon, VA",
+    desc: SITE.addressShort,
+    href: SITE.googleMapsUrl,
     external: true,
   },
 ];

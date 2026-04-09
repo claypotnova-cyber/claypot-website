@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import { TESTIMONIALS } from "@/lib/data/testimonials";
 
@@ -22,7 +23,22 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
+const TABS = [
+  { key: "all", label: "All Reviews" },
+  { key: "dining", label: "Dining" },
+  { key: "catering", label: "Catering" },
+] as const;
+
+type TabKey = (typeof TABS)[number]["key"];
+
 export default function Testimonials() {
+  const [activeTab, setActiveTab] = useState<TabKey>("all");
+
+  const filtered =
+    activeTab === "all"
+      ? TESTIMONIALS
+      : TESTIMONIALS.filter((r) => r.category === activeTab);
+
   return (
     <section
       className="section-padding"
@@ -31,7 +47,7 @@ export default function Testimonials() {
     >
       <div className="max-w-7xl mx-auto">
         <AnimatedSection>
-          <div className="text-center mb-12">
+          <div className="text-center mb-10">
             <div className="inline-flex items-center gap-2 mb-4">
               <span className="h-px w-8 bg-saffron" />
               <span className="text-saffron text-xs font-semibold tracking-[0.2em] uppercase">
@@ -45,54 +61,85 @@ export default function Testimonials() {
             >
               Loved by Our Guests
             </h2>
-            <p className="text-charcoal/60 text-lg max-w-lg mx-auto">
+            <p className="text-charcoal/60 text-lg max-w-lg mx-auto mb-8">
               Don&apos;t take our word for it — here&apos;s what our community says about Clay Pot.
             </p>
+
+            {/* Filter tabs */}
+            <div className="inline-flex items-center gap-1 rounded-full p-1" style={{ background: "rgba(244,163,0,0.1)" }}>
+              {TABS.map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className="relative px-5 py-2 rounded-full text-sm font-semibold transition-colors duration-200"
+                  style={{
+                    color: activeTab === tab.key ? "#1A0801" : "rgba(26,8,1,0.5)",
+                  }}
+                >
+                  {activeTab === tab.key && (
+                    <motion.span
+                      layoutId="tab-pill"
+                      className="absolute inset-0 rounded-full"
+                      style={{ background: "#F4A300" }}
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{tab.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </AnimatedSection>
 
         {/* Reviews grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {TESTIMONIALS.map((review, i) => (
-            <AnimatedSection key={review.id} delay={i * 0.08} direction="up">
+          <AnimatePresence mode="popLayout">
+            {filtered.map((review, i) => (
               <motion.div
-                className="rounded-2xl p-6 h-full flex flex-col"
-                style={{
-                  background: "rgba(255,255,255,0.8)",
-                  backdropFilter: "blur(12px)",
-                  border: "1px solid rgba(244,163,0,0.1)",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.06)",
-                }}
-                whileHover={{
-                  y: -4,
-                  boxShadow: "0 12px 36px rgba(0,0,0,0.1), 0 0 0 1px rgba(244,163,0,0.15)",
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                key={review.id}
+                layout
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25, delay: i * 0.05 }}
               >
-                {/* Quote icon */}
-                <span
-                  className="text-4xl leading-none mb-4 block"
-                  style={{ color: "rgba(244,163,0,0.3)" }}
-                  aria-hidden="true"
+                <motion.div
+                  className="rounded-2xl p-6 h-full flex flex-col"
+                  style={{
+                    background: "rgba(255,255,255,0.8)",
+                    backdropFilter: "blur(12px)",
+                    border: "1px solid rgba(244,163,0,0.1)",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.06)",
+                  }}
+                  whileHover={{
+                    y: -4,
+                    boxShadow: "0 12px 36px rgba(0,0,0,0.1), 0 0 0 1px rgba(244,163,0,0.15)",
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 22 }}
                 >
-                  &ldquo;
-                </span>
+                  {/* Quote icon */}
+                  <span
+                    className="text-4xl leading-none mb-4 block"
+                    style={{ color: "rgba(244,163,0,0.3)" }}
+                    aria-hidden="true"
+                  >
+                    &ldquo;
+                  </span>
 
-                {/* Stars */}
-                <StarRating rating={review.rating} />
+                  {/* Stars */}
+                  <StarRating rating={review.rating} />
 
-                {/* Quote */}
-                <blockquote className="text-charcoal/70 text-sm leading-relaxed mt-4 mb-5 flex-1">
-                  &ldquo;{review.quote}&rdquo;
-                </blockquote>
+                  {/* Quote */}
+                  <blockquote className="text-charcoal/70 text-sm leading-relaxed mt-4 mb-5 flex-1">
+                    &ldquo;{review.quote}&rdquo;
+                  </blockquote>
 
-                {/* Attribution */}
-                <div className="flex items-center justify-between pt-4 border-t border-charcoal/8">
-                  <div>
-                    <p className="text-charcoal font-semibold text-sm">{review.name}</p>
-                    <p className="text-charcoal/45 text-xs">{review.location}</p>
-                  </div>
-                  <div className="flex flex-col items-end gap-1">
+                  {/* Attribution */}
+                  <div className="flex items-center justify-between pt-4 border-t border-charcoal/8">
+                    <div>
+                      <p className="text-charcoal font-semibold text-sm">{review.name}</p>
+                      <p className="text-charcoal/45 text-xs">{review.location}</p>
+                    </div>
                     <span
                       className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
                       style={{
@@ -102,44 +149,63 @@ export default function Testimonials() {
                     >
                       {review.source}
                     </span>
-                    <span className="text-charcoal/35 text-[11px]">{review.date}</span>
                   </div>
-                </div>
+                </motion.div>
               </motion.div>
-            </AnimatedSection>
-          ))}
+            ))}
+          </AnimatePresence>
         </div>
 
-        {/* Bottom social proof bar */}
+        {/* Food facts banner */}
         <AnimatedSection delay={0.3}>
           <div
-            className="mt-10 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12"
+            className="mt-10 rounded-2xl overflow-hidden"
             style={{
               background: "linear-gradient(135deg, #1A0801, #2D0E05)",
               boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
             }}
           >
-            {[
-              { value: "4.8★", label: "Google Rating" },
-              { value: "500+", label: "Reviews" },
-              { value: "98%", label: "Would Recommend" },
-            ].map((stat) => (
-              <div key={stat.label} className="flex flex-col items-center">
-                <span
-                  className="text-3xl font-bold"
-                  style={{
-                    fontFamily: "var(--font-playfair)",
-                    background: "linear-gradient(135deg, #F4A300, #E8B84C)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
+            <div className="flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-white/10">
+              {[
+                {
+                  emoji: "🍚",
+                  fact: "Hyderabadi Dum Biryani",
+                  detail:
+                    "Slow-cooked in a sealed handi over live coal — a 400-year-old royal technique born in the Nizam's kitchens.",
+                },
+                {
+                  emoji: "🌿",
+                  fact: "Indian spices are medicine",
+                  detail:
+                    "Turmeric, cardamom, and fenugreek used daily in Indian cooking have been documented in Ayurveda for over 3,000 years.",
+                },
+                {
+                  emoji: "🔥",
+                  fact: "The art of Dum cooking",
+                  detail:
+                    "\"Dum\" means breath in Urdu. Steam trapped inside the pot circulates continuously, building layers of aroma no open flame can match.",
+                },
+              ].map((item) => (
+                <div
+                  key={item.fact}
+                  className="flex-1 px-7 py-6 flex flex-col gap-2"
                 >
-                  {stat.value}
-                </span>
-                <span className="text-white/50 text-sm">{stat.label}</span>
-              </div>
-            ))}
+                  <span className="text-2xl">{item.emoji}</span>
+                  <p
+                    className="text-sm font-semibold"
+                    style={{
+                      background: "linear-gradient(135deg, #F4A300, #E8B84C)",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      backgroundClip: "text",
+                    }}
+                  >
+                    {item.fact}
+                  </p>
+                  <p className="text-white/50 text-xs leading-relaxed">{item.detail}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </AnimatedSection>
       </div>

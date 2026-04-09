@@ -134,7 +134,7 @@ export default function CateringCTA() {
                   icon: "⚡",
                   grad: "linear-gradient(135deg, #7A5B1A, #C9962B)",
                 },
-              ].map((stat, i) => (
+              ].map((stat) => (
                 <motion.div
                   key={stat.title}
                   className="rounded-2xl p-6 text-white flex flex-col justify-between"

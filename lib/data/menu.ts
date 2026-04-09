@@ -48,12 +48,13 @@ export const MENU_CATEGORIES: { id: MenuCategory; label: string; icon: string }[
 export const MENU_ITEMS: MenuItem[] = [
   // --- FEATURED ITEMS ---
   {
-    id: "f-chettinad-chicken",
-    name: "Chettinad Chicken Curry",
-    price: "$15.99",
+    id: "f-chicken-mandi",
+    name: "Chicken Mandi",
+    price: "$16.99",
     category: "featured",
     dietary: ["non-veg"],
     featured: true,
+    image: "/images/dish-chicken-mandi.jpg",
   },
   {
     id: "f-bang-bang-gobi",
@@ -62,14 +63,16 @@ export const MENU_ITEMS: MenuItem[] = [
     category: "featured",
     dietary: ["veg"],
     featured: true,
+    image: "/images/dish-bang-bang-gobi.jpg",
   },
   {
-    id: "f-garlic-naan",
-    name: "Garlic Naan",
-    price: "$3.99",
+    id: "f-haleem",
+    name: "Haleem",
+    price: "$18.99",
     category: "featured",
-    dietary: ["veg"],
+    dietary: ["non-veg"],
     featured: true,
+    image: "/images/dish-haleem.jpg",
   },
 
   // --- REFRESHERS ---

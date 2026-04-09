@@ -102,24 +102,21 @@ export default function RootLayout({
               "telephone": SITE.phoneRaw,
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": "3065 Centreville Rd, Suite G",
-                "addressLocality": "Centreville",
-                "addressRegion": "VA",
-                "postalCode": "20120",
+                "streetAddress": SITE.addressStreet,
+                "addressLocality": SITE.addressCity,
+                "addressRegion": SITE.addressState,
+                "postalCode": SITE.addressZip,
                 "addressCountry": "US"
               },
-              "geo": {
-                "@type": "GeoCoordinates",
-                "latitude": 38.8481,
-                "longitude": -77.4363
-              },
               "servesCuisine": "Indian",
-              "openingHoursSpecification": SITE.hours.map(h => ({
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": h.day,
-                "opens": h.hours.split(" – ")[0],
-                "closes": h.hours.split(" – ")[1]
-              })),
+              "openingHoursSpecification": SITE.hours
+                .filter(h => h.hours !== "Closed")
+                .map(h => ({
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": `https://schema.org/${h.day}`,
+                  "opens": h.hours.split(" – ")[0],
+                  "closes": h.hours.split(" – ")[1]
+                })),
               "menu": `${SITE.url}/menu`,
               "acceptsReservations": "true"
             })
@@ -134,14 +131,7 @@ export default function RootLayout({
             __html: `
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').then(
-                    function(registration) {
-                      console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                    },
-                    function(err) {
-                      console.log('ServiceWorker registration failed: ', err);
-                    }
-                  );
+                  navigator.serviceWorker.register('/sw.js');
                 });
               }
             `,
