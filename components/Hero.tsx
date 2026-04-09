@@ -8,10 +8,10 @@ import { ORDER_ONLINE_URL } from "@/lib/data/navigation";
 import { SITE } from "@/lib/data/site";
 
 const bgImages = [
-  "/images/dish-mandi-platter-hero.png",
-  "/images/restaurant-interior.png",
-  "/images/real-bar-1.jpg",
-  "/images/real-bar-2.jpg",
+  "/images/real-interior.jpg",
+  "/images/real-mandi.jpg",
+  "/images/real-cocktails.jpg",
+  "/images/real-curry-naan.jpg",
 ];
 
 export default function Hero() {
