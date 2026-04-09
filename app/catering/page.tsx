@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     title: `Catering | ${SITE.fullName}`,
     description:
       "Premium Indian catering for your next event. Contact Clay Pot for a custom quote.",
-    images: [{ url: "/images/restaurant-interior.png", width: 1200, height: 630 }],
+    images: [{ url: "/images/real-interior.jpg", width: 1200, height: 630 }],
   },
 };
 

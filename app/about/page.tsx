@@ -100,7 +100,7 @@ export default function AboutPage() {
                 <div className="relative h-80 md:h-[460px] rounded-2xl overflow-hidden"
                   style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.2), 0 0 0 1px rgba(244,163,0,0.1)" }}>
                   <Image
-                    src="/images/restaurant-interior.png"
+                    src="/images/real-interior.jpg"
                     alt="Clay Pot elegant interior dining room"
                     fill
                     className="object-cover"
@@ -247,7 +247,7 @@ export default function AboutPage() {
           </AnimatedSection>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
-              { src: "/images/restaurant-interior.png", alt: "Elegant dining room" },
+              { src: "/images/real-interior.jpg", alt: "Elegant dining room" },
               { src: "/images/dish-butter-chicken.png", alt: "Butter Chicken" },
               { src: "/images/dish-biryani.png", alt: "Dum Biryani" },
               { src: "/images/dish-tandoori.png", alt: "Tandoori Chicken" },

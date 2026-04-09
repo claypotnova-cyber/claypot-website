@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     description: SITE.description,
     images: [
       {
-        url: "/images/restaurant-interior.png",
+        url: "/images/real-interior.jpg",
         width: 1200,
         height: 630,
         alt: "Clay Pot Indian Bar & Restaurant interior",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE.fullName} | Authentic Indian Dining`,
     description: SITE.description,
-    images: ["/images/restaurant-interior.png"],
+    images: ["/images/real-interior.jpg"],
   },
   alternates: {
     canonical: SITE.url,
@@ -96,7 +96,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Restaurant",
               "name": SITE.fullName,
-              "image": `${SITE.url}/images/restaurant-interior.png`,
+              "image": `${SITE.url}/images/real-interior.jpg`,
               "@id": SITE.url,
               "url": SITE.url,
               "telephone": SITE.phoneRaw,

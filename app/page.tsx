@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `${SITE.fullName} | Authentic Indian Dining`,
     description: SITE.description,
-    images: [{ url: "/images/restaurant-interior.png", width: 1200, height: 630 }],
+    images: [{ url: "/images/real-interior.jpg", width: 1200, height: 630 }],
   },
 };
 
