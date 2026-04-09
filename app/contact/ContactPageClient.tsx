@@ -147,7 +147,7 @@ export default function ContactPageClient() {
                   style={{ boxShadow: "0 4px 20px rgba(0,0,0,0.1)", border: "1px solid rgba(244,163,0,0.12)" }}>
                   <iframe
                     title="Clay Pot location map"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3107.9!2d-77.4363!3d38.8481!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89b64df07fe7b5c5%3A0x0!2sClay+Pot+Indian+Bar+%26+Restaurant!5e0!3m2!1sen!2sus!4v1"
+                    src="https://maps.google.com/maps?q=Clay+Pot+Indian+Bar+%26+Restaurant+3061+Centreville+Rd+Herndon+VA+20171&output=embed"
                     width="100%"
                     height="280"
                     style={{ border: 0, display: "block" }}
