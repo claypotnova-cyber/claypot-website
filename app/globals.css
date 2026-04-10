@@ -72,7 +72,7 @@
   }
 
   /* Announcement bar */
-  --ann-bar-h: 36px;
+  --ann-bar-h: 44px;
   @keyframes marquee-scroll {
     0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
@@ -156,8 +156,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .announcement-content {
   display: inline-block;
-  padding-right: 0;          /* gap handled by TEXT ending with spaces */
-  font-size: 0.75rem;        /* 12px */
+  padding-right: 0;
+  font-size: 0.875rem;       /* 14px */
   font-weight: 700;
   font-family: "Inter", system-ui, sans-serif;
   color: #FFF8F1;
@@ -168,7 +168,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Slightly larger on wider screens */
 @media (min-width: 640px) {
   .announcement-content {
-    font-size: 0.8125rem;    /* 13px */
+    font-size: 0.9375rem;    /* 15px */
   }
 }
 
