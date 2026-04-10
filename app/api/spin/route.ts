@@ -1,12 +1,11 @@
 /**
  * POST /api/spin
  *
- * Decides spin outcome atomically using Upstash Redis.
- * Redis atomic INCR prevents two concurrent spins from claiming the same prize slot.
+ * Decides spin outcome using Redis (ioredis + REDIS_URL from Vercel).
+ * Atomic INCR prevents concurrent spins from claiming the same prize slot.
  *
- * Required env vars (set in Vercel dashboard → Storage → Redis):
- *   UPSTASH_REDIS_REST_URL
- *   UPSTASH_REDIS_REST_TOKEN
+ * Required env var (auto-added by Vercel Redis integration):
+ *   REDIS_URL  — e.g. rediss://default:TOKEN@host.upstash.io:6379
  *
  * Request headers:
  *   x-session-token  — browser UUID stored in localStorage
@@ -18,7 +17,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { Redis } from "@upstash/redis";
+import Redis from "ioredis";
 import {
   DAILY_PRIZE_POOL,
   WIN_PROBABILITY,
@@ -30,18 +29,30 @@ import {
 
 export const runtime = "nodejs";
 
-// ── Redis client ───────────────────────────────────────────────────────────────
-const redis = new Redis({
-  url:   process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
+// ── Redis singleton ────────────────────────────────────────────────────────────
+// Module-level client is reused across warm Lambda invocations
+let _redis: Redis | null = null;
+
+function getRedis(): Redis {
+  if (!_redis) {
+    _redis = new Redis(process.env.REDIS_URL!, {
+      tls: process.env.REDIS_URL?.startsWith("rediss://")
+        ? { rejectUnauthorized: false }
+        : undefined,
+      maxRetriesPerRequest: 3,
+      enableReadyCheck: false,
+      lazyConnect: true,
+    });
+  }
+  return _redis;
+}
 
 // ── Daily limits derived from DAILY_PRIZE_POOL ────────────────────────────────
 // e.g. { NAAN: 2, LASSI: 1, MLASSI: 1, DESSERT: 2, "5OFF": 1, "10OFF": 2, BOGO: 1 }
-const DAILY_LIMITS = DAILY_PRIZE_POOL.reduce<Record<string, number>>((acc, key) => {
-  acc[key] = (acc[key] ?? 0) + 1;
-  return acc;
-}, {});
+const DAILY_LIMITS = DAILY_PRIZE_POOL.reduce<Record<string, number>>(
+  (acc, key) => { acc[key] = (acc[key] ?? 0) + 1; return acc; },
+  {}
+);
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
@@ -64,6 +75,7 @@ function generateCouponCode(prizeKey: string): string {
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    const redis = getRedis();
     const sessionToken =
       request.headers.get("x-session-token")?.trim() || "anonymous";
     const day = getBusinessDay();
@@ -75,19 +87,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ alreadySpun: true });
     }
 
-    // ── 2. Derive remaining prize slots for today ────────────────────────────
-    // Fetch current counts for all prize types in one pipeline
-    const pipeline = redis.pipeline();
+    // ── 2. Derive remaining prize slots via pipeline ─────────────────────────
     const prizeKeys = Object.keys(DAILY_LIMITS);
+    const pipeline = redis.pipeline();
     for (const key of prizeKeys) {
       pipeline.get(`spin:count:${day}:${key}`);
     }
-    const counts = await pipeline.exec<(number | null)[]>();
+    const results = await pipeline.exec();
 
-    // Build the remaining pool (one entry per available slot)
     const remaining: string[] = [];
     prizeKeys.forEach((key, i) => {
-      const issued = (counts[i] as number | null) ?? 0;
+      const issued = parseInt((results?.[i]?.[1] as string) ?? "0", 10) || 0;
       const slots  = DAILY_LIMITS[key] - issued;
       for (let s = 0; s < slots; s++) remaining.push(key);
     });
@@ -100,8 +110,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       remaining.length > 0 && Math.random() < WIN_PROBABILITY;
 
     if (shouldWin) {
-      // Shuffle remaining so picks are random
-      const shuffled = remaining.sort(() => Math.random() - 0.5);
+      const shuffled = [...remaining].sort(() => Math.random() - 0.5);
 
       for (const pick of shuffled) {
         const countKey = `spin:count:${day}:${pick}`;
@@ -110,7 +119,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         const newCount = await redis.incr(countKey);
 
         if (newCount <= DAILY_LIMITS[pick]) {
-          // Slot successfully claimed
+          // Set expiry on first increment (keeps Redis clean)
+          if (newCount === 1) {
+            await redis.expire(countKey, 60 * 60 * 26); // 26 h
+          }
+
           resultKey  = pick as PrizeKey;
           couponCode = generateCouponCode(pick);
 
@@ -118,32 +131,33 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           const expiresAt = new Date(issuedAt);
           expiresAt.setDate(expiresAt.getDate() + COUPON_VALIDITY_DAYS);
 
-          // Store coupon (keep for 90 days for staff lookup)
+          // Store coupon for 90 days (staff lookup)
           await redis.set(
             `coupon:${couponCode}`,
             JSON.stringify({
               couponCode,
-              prizeKey:   pick,
-              prizeLabel: PRIZE_LABELS[pick as PrizeKey],
-              issuedAt:   issuedAt.toISOString(),
-              expiresAt:  expiresAt.toISOString(),
-              status:     "pending",
+              prizeKey:    pick,
+              prizeLabel:  PRIZE_LABELS[pick as PrizeKey],
+              issuedAt:    issuedAt.toISOString(),
+              expiresAt:   expiresAt.toISOString(),
+              status:      "pending",
               businessDay: day,
               sessionToken,
             }),
-            { ex: 60 * 60 * 24 * 90 }
+            "EX",
+            60 * 60 * 24 * 90
           );
 
           break;
         } else {
-          // Race condition — another spin claimed this slot first; undo and try next
+          // Race condition — undo and try next prize
           await redis.decr(countKey);
         }
       }
     }
 
-    // ── 4. Record this spin (25 h TTL covers timezone edge cases) ────────────
-    await redis.set(spinKey, "1", { ex: 60 * 60 * 25 });
+    // ── 4. Record spin (25 h TTL) ────────────────────────────────────────────
+    await redis.set(spinKey, "1", "EX", 60 * 60 * 25);
 
     // ── 5. Respond ───────────────────────────────────────────────────────────
     const isWin = resultKey !== "TRY_AGAIN";
