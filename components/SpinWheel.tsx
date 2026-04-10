@@ -52,14 +52,29 @@ function markSpunToday(): void {
 // ── Target rotation for a given wheel slice index ──────────────────────────────
 // Pointer is at top (12 o'clock). Conic starts at 3 o'clock (CSS default),
 // so the pointer effectively sits at 270° in conic-space.
+//
+// IMPORTANT: We must normalise currentRotation before computing the delta so
+// that accumulated rotation from previous spins doesn't displace the landing
+// position. The formula:
+//   1. Convert currentRotation to its visual equivalent (mod 360).
+//   2. Find the desired visual angle for the target slice (targetAngle).
+//   3. Compute the *forward* delta to reach targetAngle from the current angle.
+//   4. Add random full rotations on top to make the wheel spin visibly.
 function targetRotationForIndex(
   sliceIndex: number,
   currentRotation: number
 ): number {
+  // Centre of the target slice in conic-space (from top, clockwise)
   const segmentCenter = sliceIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
+  // Visual angle (in CSS transform-space) where that slice sits under the pointer
   const targetAngle   = (270 - segmentCenter + 360) % 360;
-  const extraSpins    = 5 + Math.floor(Math.random() * 4); // 5-8 full rotations
-  return currentRotation + extraSpins * 360 + targetAngle;
+  // Where the wheel visually is right now (0–359°)
+  const currentAngle  = ((currentRotation % 360) + 360) % 360;
+  // How much we need to rotate forward to reach targetAngle (always positive)
+  const delta = ((targetAngle - currentAngle) + 360) % 360 || 360;
+  // Add 5–8 full spins so the animation is long enough to feel exciting
+  const extraSpins = 5 + Math.floor(Math.random() * 4);
+  return currentRotation + extraSpins * 360 + delta;
 }
 
 // ── Component ──────────────────────────────────────────────────────────────────
