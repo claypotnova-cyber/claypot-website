@@ -70,6 +70,13 @@
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
   }
+
+  /* Announcement bar */
+  --ann-bar-h: 36px;
+  @keyframes marquee-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
 }
 
 /* Base styles */
@@ -101,6 +108,69 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar-track { background: #1a0802; }
 ::-webkit-scrollbar-thumb { background: #F4A300; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #C9962B; }
+
+/* ── Announcement Bar ─────────────────────────────────────────────────────── */
+.top-announcement-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  height: var(--ann-bar-h);
+  background: #651F12;           /* brand maroon */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  /* Faint edge fade so text doesn't hard-clip */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 3%,
+    black 97%,
+    transparent 100%
+  );
+}
+
+.announcement-track {
+  /* Two copies side-by-side → total width = 2 × content width */
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marquee-scroll 55s linear infinite;
+}
+
+/* Pause on hover — desktop only */
+@media (hover: hover) {
+  .top-announcement-bar:hover .announcement-track {
+    animation-play-state: paused;
+  }
+}
+
+.announcement-content {
+  display: inline-block;
+  padding-right: 0;          /* gap handled by TEXT ending with spaces */
+  font-size: 0.75rem;        /* 12px */
+  font-weight: 700;
+  font-family: "Inter", system-ui, sans-serif;
+  color: #FFF8F1;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+/* Slightly larger on wider screens */
+@media (min-width: 640px) {
+  .announcement-content {
+    font-size: 0.8125rem;    /* 13px */
+  }
+}
 
 /* Utility classes */
 .glass {

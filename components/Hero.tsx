@@ -1,11 +1,20 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { ORDER_ONLINE_URL } from "@/lib/data/navigation";
 import { SITE } from "@/lib/data/site";
+
+const CYCLING_PHRASES = [
+  "Signature Mandi.",
+  "Bold Biryanis.",
+  "Rich Curries.",
+  "Craft Cocktails.",
+  "Expert Catering.",
+  "Dine-In Magic.",
+];
 
 const bgImages = [
   "/images/real-interior.jpg",
@@ -16,11 +25,19 @@ const bgImages = [
 
 export default function Hero() {
   const [currentBg, setCurrentBg] = useState(0);
+  const [phraseIndex, setPhraseIndex] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentBg((prev) => (prev + 1) % bgImages.length);
     }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPhraseIndex((prev) => (prev + 1) % CYCLING_PHRASES.length);
+    }, 2800);
     return () => clearInterval(timer);
   }, []);
 
@@ -144,16 +161,25 @@ export default function Hero() {
           >
             Experience Clay Pot&apos;s
             <br />
-            <span
-              className="italic"
-              style={{
-                background: "linear-gradient(135deg, #F4A300, #E8B84C, #C9962B)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              Signature Mandi.
+            <span className="relative inline-block overflow-hidden" style={{ minHeight: "1.15em" }}>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={phraseIndex}
+                  className="italic inline-block"
+                  style={{
+                    background: "linear-gradient(135deg, #F4A300, #E8B84C, #C9962B)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                  initial={{ opacity: 0, y: 32, filter: "blur(6px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: -28, filter: "blur(4px)" }}
+                  transition={{ duration: 0.55, ease: "easeInOut" }}
+                >
+                  {CYCLING_PHRASES[phraseIndex]}
+                </motion.span>
+              </AnimatePresence>
             </span>
           </motion.h1>
 

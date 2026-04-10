@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SPIN_REWARDS, type SpinReward } from "@/lib/data/promotions";
+import SpinCouponModal, { type CouponData } from "@/components/SpinCouponModal";
 
 const SEGMENT_COUNT = SPIN_REWARDS.length; // 8
 const SEGMENT_ANGLE = 360 / SEGMENT_COUNT; // 45°
 
-// Build a conic-gradient string for the wheel
+// ── Wheel gradient ─────────────────────────────────────────────────────────────
 function buildConicGradient(): string {
   const stops = SPIN_REWARDS.map((r, i) => {
     const start = i * SEGMENT_ANGLE;
@@ -16,61 +17,144 @@ function buildConicGradient(): string {
   });
   return `conic-gradient(from 0deg, ${stops.join(", ")})`;
 }
-
 const CONIC = buildConicGradient();
 
+// ── localStorage helpers ───────────────────────────────────────────────────────
+const STORAGE_TOKEN_KEY = "claypot_session_token";
+const STORAGE_SPUN_KEY  = "claypot_spun_date";
+
+function getOrCreateToken(): string {
+  let token = localStorage.getItem(STORAGE_TOKEN_KEY);
+  if (!token) {
+    token = crypto.randomUUID();
+    localStorage.setItem(STORAGE_TOKEN_KEY, token);
+  }
+  return token;
+}
+
+function todayStr(): string {
+  const d = new Date();
+  return [
+    d.getFullYear(),
+    String(d.getMonth() + 1).padStart(2, "0"),
+    String(d.getDate()).padStart(2, "0"),
+  ].join("-");
+}
+
+function hasSpunToday(): boolean {
+  return localStorage.getItem(STORAGE_SPUN_KEY) === todayStr();
+}
+
+function markSpunToday(): void {
+  localStorage.setItem(STORAGE_SPUN_KEY, todayStr());
+}
+
+// ── Target rotation for a given wheel slice index ──────────────────────────────
+// Pointer is at top (12 o'clock). Conic starts at 3 o'clock (CSS default),
+// so the pointer effectively sits at 270° in conic-space.
+function targetRotationForIndex(
+  sliceIndex: number,
+  currentRotation: number
+): number {
+  const segmentCenter = sliceIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
+  const targetAngle   = (270 - segmentCenter + 360) % 360;
+  const extraSpins    = 5 + Math.floor(Math.random() * 4); // 5-8 full rotations
+  return currentRotation + extraSpins * 360 + targetAngle;
+}
+
+// ── Component ──────────────────────────────────────────────────────────────────
 export default function SpinWheel() {
-  const [open, setOpen] = useState(false);
-  const [spinning, setSpinning] = useState(false);
+  const [open, setOpen]               = useState(false);
+  const [spinning, setSpinning]       = useState(false);
   const [totalRotation, setTotalRotation] = useState(0);
-  const [result, setResult] = useState<SpinReward | null>(null);
-  const [hasSpun, setHasSpun] = useState(false);
-  const spinCountRef = useRef(0);
+  const [result, setResult]           = useState<SpinReward | null>(null);
+  const [coupon, setCoupon]           = useState<CouponData | null>(null);
+  const [showCoupon, setShowCoupon]   = useState(false);
 
-  function handleSpin() {
-    if (spinning || hasSpun) return;
+  // "already spun today" is derived from localStorage; set on open
+  const [alreadySpun, setAlreadySpun] = useState(false);
+  const [error, setError]             = useState<string | null>(null);
 
-    // Pick a random winning segment (bias away from "try again")
-    const winnable = SPIN_REWARDS.filter((r) => r.isWin);
-    const pool = [...winnable, ...winnable, SPIN_REWARDS.find((r) => !r.isWin)!];
-    const chosen = pool[Math.floor(Math.random() * pool.length)];
-    const chosenIndex = SPIN_REWARDS.findIndex((r) => r.id === chosen.id);
-
-    // The pointer is at the top (270° from conic start = 12 o'clock)
-    // Segment center for chosenIndex:
-    const segmentCenter = chosenIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
-    // We need segmentCenter to land at 270° (top pointer):
-    const targetAngle = (270 - segmentCenter + 360) % 360;
-    // Add extra full spins for drama
-    const extraSpins = 5 + Math.floor(Math.random() * 3);
-    const finalRotation = totalRotation + extraSpins * 360 + targetAngle;
-
-    setSpinning(true);
-    setTotalRotation(finalRotation);
-    spinCountRef.current += 1;
-
-    setTimeout(() => {
-      setSpinning(false);
-      setResult(chosen);
-      setHasSpun(true);
-    }, 4200);
+  // Check localStorage state when modal opens
+  function handleOpen() {
+    setAlreadySpun(hasSpunToday());
+    setError(null);
+    setOpen(true);
   }
 
   function handleClose() {
     setOpen(false);
-    // Reset after close animation
     setTimeout(() => {
       setResult(null);
-      setHasSpun(false);
-      setTotalRotation(0);
+      setError(null);
+      // keep alreadySpun in sync with localStorage — do NOT reset it
     }, 400);
   }
 
+  async function handleSpin() {
+    if (spinning || result || alreadySpun) return;
+    setError(null);
+    setSpinning(true);
+
+    try {
+      const token = getOrCreateToken();
+
+      const res = await fetch("/api/spin", {
+        method: "POST",
+        headers: { "x-session-token": token },
+      });
+
+      if (!res.ok) throw new Error("Server error");
+
+      const data = await res.json();
+
+      // Server says already spun (e.g. localStorage cleared but server knows)
+      if (data.alreadySpun) {
+        markSpunToday();
+        setAlreadySpun(true);
+        setSpinning(false);
+        return;
+      }
+
+      // Determine which wheel slice index to land on
+      const wheelIndex: number = data.wheelIndex ?? 1; // fallback to TRY_AGAIN (idx 1)
+      const sliceReward = SPIN_REWARDS[wheelIndex];
+
+      // Compute final rotation and animate
+      const finalRotation = targetRotationForIndex(wheelIndex, totalRotation);
+      setTotalRotation(finalRotation);
+
+      // Wait for animation (4 s) then show result
+      setTimeout(() => {
+        setSpinning(false);
+        setResult(sliceReward);
+        markSpunToday();
+        setAlreadySpun(true);
+
+        if (data.isWin && data.couponCode) {
+          setCoupon({
+            prizeLabel: data.prizeLabel,
+            couponCode: data.couponCode,
+            issuedAt:   data.issuedAt,
+            expiresAt:  data.expiresAt,
+          });
+          // Short delay so the wheel result renders before coupon takes over
+          setTimeout(() => setShowCoupon(true), 900);
+        }
+      }, 4200);
+    } catch {
+      setSpinning(false);
+      setError("Something went wrong. Please try again.");
+    }
+  }
+
+
+
   return (
     <>
-      {/* ── Floating trigger ──────────────────────────────────────────────────── */}
+      {/* ── Floating trigger ──────────────────────────────────────────────── */}
       <motion.button
-        onClick={() => setOpen(true)}
+        onClick={handleOpen}
         className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3 rounded-full
           font-black text-sm uppercase tracking-widest shadow-2xl"
         style={{
@@ -89,16 +173,30 @@ export default function SpinWheel() {
         Spin to Win
       </motion.button>
 
-      {/* ── Modal overlay ─────────────────────────────────────────────────────── */}
+      {/* ── Coupon modal (winner) ─────────────────────────────────────────── */}
       <AnimatePresence>
-        {open && (
+        {showCoupon && coupon && (
+          <SpinCouponModal
+            coupon={coupon}
+            onClose={() => {
+              setShowCoupon(false);
+              setCoupon(null);
+              handleClose();
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── Spin wheel modal ──────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {open && !showCoupon && (
           <motion.div
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             style={{ background: "rgba(26,8,1,0.85)", backdropFilter: "blur(12px)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={(e) => e.target === e.currentTarget && handleClose()}
+            onClick={(e) => e.target === e.currentTarget && !spinning && handleClose()}
           >
             <motion.div
               className="relative w-full max-w-md rounded-3xl overflow-hidden"
@@ -111,11 +209,12 @@ export default function SpinWheel() {
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
               transition={{ type: "spring", stiffness: 260, damping: 22 }}
             >
-              {/* Close button */}
+              {/* Close */}
               <button
                 onClick={handleClose}
+                disabled={spinning}
                 className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full flex items-center justify-center
-                  text-maroon/40 hover:text-maroon/80 hover:bg-maroon/8 transition-all"
+                  text-maroon/40 hover:text-maroon/80 hover:bg-maroon/8 transition-all disabled:opacity-30"
                 aria-label="Close"
               >
                 ✕
@@ -131,16 +230,18 @@ export default function SpinWheel() {
                     className="text-3xl font-black text-maroon"
                     style={{ fontFamily: "var(--font-playfair)" }}
                   >
-                    Spin & Win
+                    Spin &amp; Win
                   </h2>
                   <p className="text-maroon/50 text-sm mt-1">
-                    One spin per visit. Good luck!
+                    {alreadySpun
+                      ? "You already used today's spin."
+                      : "One spin per day. Good luck!"}
                   </p>
                 </div>
 
-                {/* Wheel container */}
+                {/* Wheel */}
                 <div className="relative mx-auto mb-6" style={{ width: 280, height: 280 }}>
-                  {/* Pointer at top */}
+                  {/* Pointer */}
                   <div
                     className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 z-20"
                     style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }}
@@ -148,14 +249,14 @@ export default function SpinWheel() {
                     <div
                       className="w-0 h-0"
                       style={{
-                        borderLeft: "10px solid transparent",
+                        borderLeft:  "10px solid transparent",
                         borderRight: "10px solid transparent",
-                        borderTop: "22px solid #651F12",
+                        borderTop:   "22px solid #651F12",
                       }}
                     />
                   </div>
 
-                  {/* Spinning wheel */}
+                  {/* Spinning wheel disc */}
                   <motion.div
                     className="w-full h-full rounded-full"
                     style={{
@@ -172,25 +273,28 @@ export default function SpinWheel() {
                     {/* Segment labels */}
                     {SPIN_REWARDS.map((reward, i) => {
                       const angle = i * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
-                      const rad = ((angle - 90) * Math.PI) / 180;
-                      const r = 92;
-                      const x = 140 + r * Math.cos(rad);
-                      const y = 140 + r * Math.sin(rad);
+                      const rad   = ((angle - 90) * Math.PI) / 180;
+                      const r     = 92;
+                      const x     = 140 + r * Math.cos(rad);
+                      const y     = 140 + r * Math.sin(rad);
                       return (
                         <div
                           key={reward.id}
                           className="absolute text-center pointer-events-none select-none"
                           style={{
-                            left: x,
-                            top: y,
+                            left:      x,
+                            top:       y,
                             transform: `translate(-50%, -50%) rotate(${angle}deg)`,
-                            width: 70,
+                            width:     70,
                           }}
                         >
                           <span className="block text-lg leading-none">{reward.emoji}</span>
                           <span
                             className="block text-[8px] font-black uppercase leading-tight mt-0.5"
-                            style={{ color: reward.textColor, textShadow: "0 1px 2px rgba(0,0,0,0.2)" }}
+                            style={{
+                              color:      reward.textColor,
+                              textShadow: "0 1px 2px rgba(0,0,0,0.3)",
+                            }}
                           >
                             {reward.label}
                           </span>
@@ -209,58 +313,98 @@ export default function SpinWheel() {
                   </div>
                 </div>
 
-                {/* Result or Spin button */}
+                {/* Result / spin button / already-spun state */}
                 <AnimatePresence mode="wait">
-                  {result ? (
+                  {alreadySpun && !result ? (
+                    // Already spun today — no result to show yet in this session
+                    <motion.div
+                      key="already-spun"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-center"
+                    >
+                      <div className="rounded-2xl p-5 mb-3 bg-maroon/5 border border-maroon/10">
+                        <span className="text-3xl block mb-2">🗓️</span>
+                        <h3
+                          className="text-lg font-black text-maroon mb-1"
+                          style={{ fontFamily: "var(--font-playfair)" }}
+                        >
+                          Already Spun Today
+                        </h3>
+                        <p className="text-maroon/60 text-sm">
+                          You already used today&apos;s spin.
+                          <br />
+                          Come back tomorrow for another chance!
+                        </p>
+                      </div>
+                    </motion.div>
+                  ) : result ? (
+                    // Show result card
                     <motion.div
                       key="result"
-                      initial={{ opacity: 0, scale: 0.8 }}
+                      initial={{ opacity: 0, scale: 0.85 }}
                       animate={{ opacity: 1, scale: 1 }}
                       className="text-center"
                     >
                       {result.isWin ? (
-                        <>
-                          <div
-                            className="rounded-2xl p-5 mb-4"
-                            style={{
-                              background: `${result.bgColor}18`,
-                              border: `1px solid ${result.bgColor}40`,
-                            }}
+                        // Winner — coupon modal auto-opens; this is a brief flash
+                        <div
+                          className="rounded-2xl p-5 mb-3"
+                          style={{
+                            background: `${result.bgColor}18`,
+                            border:     `1px solid ${result.bgColor}40`,
+                          }}
+                        >
+                          <span className="text-4xl block mb-2">{result.emoji}</span>
+                          <h3
+                            className="text-xl font-black text-maroon mb-1"
+                            style={{ fontFamily: "var(--font-playfair)" }}
                           >
-                            <span className="text-4xl block mb-2">{result.emoji}</span>
-                            <h3
-                              className="text-xl font-black text-maroon mb-1"
-                              style={{ fontFamily: "var(--font-playfair)" }}
-                            >
-                              {result.label}
-                            </h3>
-                            <p className="text-maroon/60 text-sm">{result.sublabel}</p>
-                          </div>
-                          <p
-                            className="text-[11px] font-semibold text-maroon/50 mb-1"
-                          >
-                            {result.applicability}
+                            {result.label}
+                          </h3>
+                          <p className="text-maroon/60 text-sm">
+                            Your coupon is loading…
                           </p>
-                          <p className="text-[10px] text-maroon/35 italic">
-                            {result.disclaimer}
-                          </p>
-                        </>
+                        </div>
                       ) : (
-                        <>
-                          <div className="rounded-2xl p-5 mb-4 bg-maroon/5 border border-maroon/10">
-                            <span className="text-4xl block mb-2">{result.emoji}</span>
-                            <h3
-                              className="text-xl font-black text-maroon mb-1"
-                              style={{ fontFamily: "var(--font-playfair)" }}
-                            >
-                              {result.label}
-                            </h3>
-                            <p className="text-maroon/60 text-sm">{result.sublabel}</p>
-                          </div>
-                        </>
+                        // Try again
+                        <div className="rounded-2xl p-5 mb-3 bg-maroon/5 border border-maroon/10">
+                          <span className="text-4xl block mb-2">{result.emoji}</span>
+                          <h3
+                            className="text-xl font-black text-maroon mb-1"
+                            style={{ fontFamily: "var(--font-playfair)" }}
+                          >
+                            No Prize This Time
+                          </h3>
+                          <p className="text-maroon/60 text-sm">
+                            Better luck tomorrow — try again then!
+                          </p>
+                        </div>
                       )}
                     </motion.div>
+                  ) : error ? (
+                    <motion.div
+                      key="error"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="text-center"
+                    >
+                      <div className="rounded-2xl p-4 mb-3 bg-red-50 border border-red-200">
+                        <p className="text-red-700 text-sm font-semibold">{error}</p>
+                      </div>
+                      <button
+                        onClick={handleSpin}
+                        className="px-8 py-3.5 rounded-full font-black text-sm uppercase tracking-widest"
+                        style={{
+                          background: "linear-gradient(135deg, #F4A300, #C9962B)",
+                          color: "#1A0801",
+                        }}
+                      >
+                        Try Again
+                      </button>
+                    </motion.div>
                   ) : (
+                    // Default — spin button
                     <motion.div key="spin-btn" className="text-center">
                       <button
                         onClick={handleSpin}
@@ -281,15 +425,13 @@ export default function SpinWheel() {
                   )}
                 </AnimatePresence>
 
-                {/* Disclaimer footer */}
-                <div
-                  className="mt-5 pt-4 border-t border-maroon/10 text-center space-y-0.5"
-                >
+                {/* Footer */}
+                <div className="mt-5 pt-4 border-t border-maroon/10 text-center space-y-0.5">
                   <p className="text-[10px] text-maroon/40 font-semibold">
                     Offers valid for dine-in and in-store pickup only.
                   </p>
                   <p className="text-[10px] text-maroon/30 italic">
-                    Not valid for delivery or third-party orders. One offer per visit.
+                    Not valid for delivery or third-party orders. One spin per day.
                   </p>
                 </div>
               </div>

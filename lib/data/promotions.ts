@@ -50,7 +50,7 @@ export const PROMOTIONS: Promotion[] = [
     title: "Happy Hour",
     description:
       "Handcrafted cocktails, shareable bites, and vibrant conversation. Unwind in our lounge with exclusive dine-in happy hour specials.",
-    badge: "Daily · 4PM–7PM",
+    badge: "Sun–Thu · 4PM–7PM",
     ctaLabel: "Reserve a Table",
     ctaHref: "/contact",
     color: "maroon",
@@ -153,9 +153,12 @@ export const CATERING_PROMOTIONS: Promotion[] = [
 ];
 
 // ── Spin Wheel Rewards (dine-in / pickup only) ────────────────────────────────
+// ORDER MATTERS — index must match PRIZE_WHEEL_INDEX in lib/prizes.ts
+// 0:NAAN  1:TRY_AGAIN  2:LASSI  3:5OFF  4:DESSERT  5:10OFF  6:MLASSI  7:BOGO
 
 export interface SpinReward {
-  id: string;
+  id: string;         // matches PrizeKey in lib/prizes.ts
+  prizeKey: string;   // e.g. "NAAN" — used by backend
   label: string;
   sublabel: string;
   emoji: string;
@@ -167,65 +170,25 @@ export interface SpinReward {
 }
 
 export const SPIN_REWARDS: SpinReward[] = [
+  // index 0 — NAAN
   {
-    id: "free-naan",
+    id: "NAAN",
+    prizeKey: "NAAN",
     label: "Free Garlic Naan",
     sublabel: "with any dine-in entrée",
     emoji: "🫓",
     bgColor: "#F4A300",
     textColor: "#1A0801",
     applicability: "Valid for dine-in only",
-    disclaimer: "Ask your server to redeem. One per table.",
+    disclaimer: "Show coupon screenshot at counter. One per visit.",
     isWin: true,
   },
+  // index 1 — TRY_AGAIN
   {
-    id: "10-off-pickup",
-    label: "10% Off Pickup",
-    sublabel: "on your next in-store order",
-    emoji: "🏷️",
-    bgColor: "#651F12",
-    textColor: "#FFF8F1",
-    applicability: "Valid for in-store pickup only",
-    disclaimer: "Show this screen at the counter. Not valid on delivery.",
-    isWin: true,
-  },
-  {
-    id: "free-dessert",
-    label: "Free Dessert",
-    sublabel: "with a dine-in entrée",
-    emoji: "🍮",
-    bgColor: "#C9962B",
-    textColor: "#1A0801",
-    applicability: "Valid for dine-in only",
-    disclaimer: "Ask your server. One per table per visit.",
-    isWin: true,
-  },
-  {
-    id: "free-drink",
-    label: "Free Mango Lassi",
-    sublabel: "on in-store pickup orders",
-    emoji: "🥭",
-    bgColor: "#3D1209",
-    textColor: "#FFD56B",
-    applicability: "Valid for in-store pickup only",
-    disclaimer: "Show this screen at the counter. Not valid on delivery.",
-    isWin: true,
-  },
-  {
-    id: "bogo-appetizer",
-    label: "Buy 1 Get 1 Half Off",
-    sublabel: "appetizers — dine-in only",
-    emoji: "🥗",
-    bgColor: "#7A5B1A",
-    textColor: "#FFF8F1",
-    applicability: "Valid for dine-in only",
-    disclaimer: "Lower-priced item at 50% off. Ask your server.",
-    isWin: true,
-  },
-  {
-    id: "try-again",
+    id: "TRY_AGAIN",
+    prizeKey: "TRY_AGAIN",
     label: "Try Again!",
-    sublabel: "Visit us for another spin",
+    sublabel: "Better luck next time",
     emoji: "🔄",
     bgColor: "#F4E4C1",
     textColor: "#651F12",
@@ -233,26 +196,82 @@ export const SPIN_REWARDS: SpinReward[] = [
     disclaimer: "",
     isWin: false,
   },
+  // index 2 — LASSI
   {
-    id: "free-lassi-dine",
+    id: "LASSI",
+    prizeKey: "LASSI",
     label: "Free Lassi",
-    sublabel: "with dine-in lunch special",
-    emoji: "🥤",
-    bgColor: "#F4A300",
-    textColor: "#1A0801",
-    applicability: "Valid for dine-in only · Mon–Fri 11:30AM–3PM",
-    disclaimer: "Valid during lunch hours only. Ask your server.",
-    isWin: true,
-  },
-  {
-    id: "5-off-pickup",
-    label: "$5 Off Pickup",
-    sublabel: "on orders of $30 or more",
-    emoji: "💰",
+    sublabel: "dine-in or pickup",
+    emoji: "🥛",
     bgColor: "#651F12",
     textColor: "#FFF8F1",
+    applicability: "Valid dine-in or in-store pickup",
+    disclaimer: "Show coupon screenshot at counter. One per visit.",
+    isWin: true,
+  },
+  // index 3 — 5OFF
+  {
+    id: "5OFF",
+    prizeKey: "5OFF",
+    label: "$5 Off Pickup",
+    sublabel: "on orders of $30 or more",
+    emoji: "💵",
+    bgColor: "#2A5C24",
+    textColor: "#FFF8F1",
+    applicability: "Valid for in-store pickup only · Min $30",
+    disclaimer: "Show coupon screenshot at counter. Not valid on delivery.",
+    isWin: true,
+  },
+  // index 4 — DESSERT
+  {
+    id: "DESSERT",
+    prizeKey: "DESSERT",
+    label: "Free Dessert",
+    sublabel: "with a dine-in entrée",
+    emoji: "🍮",
+    bgColor: "#C9962B",
+    textColor: "#1A0801",
+    applicability: "Valid for dine-in only",
+    disclaimer: "Show coupon screenshot at counter. One per table per visit.",
+    isWin: true,
+  },
+  // index 5 — 10OFF
+  {
+    id: "10OFF",
+    prizeKey: "10OFF",
+    label: "10% Off Pickup",
+    sublabel: "on your next in-store order",
+    emoji: "🏷️",
+    bgColor: "#3D1209",
+    textColor: "#FFD56B",
     applicability: "Valid for in-store pickup only",
-    disclaimer: "Show this screen at the counter. Not valid on delivery.",
+    disclaimer: "Show coupon screenshot at counter. Not valid on delivery.",
+    isWin: true,
+  },
+  // index 6 — MLASSI
+  {
+    id: "MLASSI",
+    prizeKey: "MLASSI",
+    label: "Free Mango Lassi",
+    sublabel: "dine-in or pickup",
+    emoji: "🥭",
+    bgColor: "#E8773A",
+    textColor: "#1A0801",
+    applicability: "Valid dine-in or in-store pickup",
+    disclaimer: "Show coupon screenshot at counter. Not valid on delivery.",
+    isWin: true,
+  },
+  // index 7 — BOGO
+  {
+    id: "BOGO",
+    prizeKey: "BOGO",
+    label: "Buy 1 Get 1 Half Off",
+    sublabel: "appetizers — dine-in only",
+    emoji: "🍽️",
+    bgColor: "#4A2060",
+    textColor: "#FFF8F1",
+    applicability: "Valid for dine-in only",
+    disclaimer: "Lower-priced item at 50% off. Show coupon screenshot at counter.",
     isWin: true,
   },
 ];
@@ -323,7 +342,7 @@ export const COMBO_PRESETS: ComboPreset[] = [
 export const PROMO_BAR_MESSAGES = [
   "🌞 Lunch Specials Mon–Fri · Dine-In & Pickup · 11:30AM–3PM",
   "🎉 Full-Service Catering — Corporate, Weddings & Private Events",
-  "🍹 Happy Hour Daily 4–7PM · Dine-In Lounge Specials",
+  "🍹 Happy Hour Sun–Thu 4–7PM · Dine-In Lounge Specials",
   "📍 Herndon, VA's newest excuse to skip cooking · Dine-In, Pickup & Catering",
   "✨ Weekend Chef's Special — Reserve Your Table Today",
 ];

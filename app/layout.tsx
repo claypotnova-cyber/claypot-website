@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PromoBar from "@/components/PromoBar";
+import AnnouncementBar from "@/components/AnnouncementBar";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -122,6 +123,7 @@ export default function RootLayout({
             })
           }}
         />
+        <AnnouncementBar />
         <PromoBar />
         <Header />
         <main>{children}</main>

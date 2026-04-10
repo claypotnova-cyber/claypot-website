@@ -39,7 +39,7 @@ export const MENU_CATEGORIES: { id: MenuCategory; label: string; icon: string }[
   { id: "non-veg-appetizers", label: "Non-Veg Appetizers", icon: "🍗" },
   { id: "veg-curries", label: "Veg Curries", icon: "🍲" },
   { id: "non-veg-curries", label: "Non-Veg Curries", icon: "🍖" },
-  { id: "biryanis", label: "Biryanis", icon: "🥘" },
+  { id: "biryanis", label: "Biryanis", icon: "/images/biryani-icon.png" },
   { id: "breads", label: "Breads", icon: "🫓" },
   { id: "sides", label: "Sides", icon: "🥣" },
   { id: "desserts", label: "Desserts", icon: "🍮" },

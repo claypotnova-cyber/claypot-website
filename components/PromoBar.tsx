@@ -16,8 +16,12 @@ export default function PromoBar() {
 
   return (
     <div
-      className="relative z-50 overflow-hidden"
+      className="z-[60] overflow-hidden"
       style={{
+        position: "fixed",
+        top: "var(--ann-bar-h)",
+        left: 0,
+        right: 0,
         background: "linear-gradient(90deg, #651F12 0%, #8B2A18 50%, #651F12 100%)",
       }}
     >

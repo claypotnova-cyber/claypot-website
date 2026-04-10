@@ -7,7 +7,6 @@ import DineInPromo from "@/components/DineInPromo";
 import FeaturedDishes from "@/components/FeaturedDishes";
 import CateringCTA from "@/components/CateringCTA";
 import ComboBuilder from "@/components/ComboBuilder";
-import Testimonials from "@/components/Testimonials";
 import GalleryStrip from "@/components/GalleryStrip";
 import VisitSection from "@/components/VisitSection";
 import SpinWheel from "@/components/SpinWheel";
@@ -45,9 +44,6 @@ export default function HomePage() {
 
       {/* 7. Featured Dishes */}
       <FeaturedDishes />
-
-      {/* 8. Testimonials */}
-      <Testimonials />
 
       {/* 9. Gallery */}
       <GalleryStrip />

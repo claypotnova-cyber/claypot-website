@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { MENU_ITEMS, MENU_CATEGORIES } from "@/lib/data/menu";
 import { SITE } from "@/lib/data/site";
+import Image from "next/image";
 
 const ORDER_ONLINE_URL = SITE.toastOrderUrl;
 
@@ -78,7 +79,13 @@ export default function MenuPageClient() {
                     ? "bg-maroon text-white shadow-xl shadow-maroon/20 translate-y-[-2px]"
                     : "text-maroon/50 hover:text-maroon hover:bg-maroon/5"}`}
               >
-                <span className="text-sm">{cat.icon}</span>
+                {cat.icon.startsWith("/") ? (
+                  <div className="relative w-4 h-4 shrink-0">
+                    <Image src={cat.icon} alt={cat.label} fill className="object-contain drop-shadow" />
+                  </div>
+                ) : (
+                  <span className="text-sm">{cat.icon}</span>
+                )}
                 <span>{cat.label}</span>
               </button>
             );
@@ -105,7 +112,13 @@ export default function MenuPageClient() {
                 {/* Category Header */}
                 <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between border-b-2 border-maroon/5 pb-10 gap-8">
                   <div className="flex items-center gap-8">
-                    <span className="text-5xl md:text-6xl drop-shadow-md">{category.icon}</span>
+                    {category.icon.startsWith("/") ? (
+                      <div className="relative w-12 h-12 md:w-16 md:h-16 shrink-0 drop-shadow-md">
+                        <Image src={category.icon} alt={category.label} fill className="object-cover" />
+                      </div>
+                    ) : (
+                      <span className="text-5xl md:text-6xl drop-shadow-md">{category.icon}</span>
+                    )}
                     <div>
                       <h2 className="text-4xl md:text-6xl font-extrabold text-maroon font-playfair tracking-tight leading-tight">
                         {category.label}

@@ -36,7 +36,7 @@ export default function Header() {
             ? "glass-dark shadow-elevated py-2"
             : "bg-transparent py-4"
         }`}
-        style={{ marginTop: "40px" }} /* offset for promobar */
+        style={{ marginTop: "calc(var(--ann-bar-h) + 40px)" }} /* announcement bar + promo bar */
       >
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
           {/* Logo */}
