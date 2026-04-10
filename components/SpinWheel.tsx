@@ -116,8 +116,9 @@ export default function SpinWheel() {
         return;
       }
 
-      // Determine which wheel slice index to land on
-      const wheelIndex: number = data.wheelIndex ?? 1; // fallback to TRY_AGAIN (idx 1)
+      // If no win, always land on TRY_AGAIN (index 1) — never on a prize slice
+      const TRY_AGAIN_INDEX = 1;
+      const wheelIndex: number = data.isWin ? (data.wheelIndex ?? TRY_AGAIN_INDEX) : TRY_AGAIN_INDEX;
       const sliceReward = SPIN_REWARDS[wheelIndex];
 
       // Compute final rotation and animate
