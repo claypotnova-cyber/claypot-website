@@ -31,12 +31,15 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
+        className={`fixed left-0 right-0 z-40 transition-all duration-500 ${
           scrolled
             ? "glass-dark shadow-elevated py-2"
             : "bg-transparent py-4"
         }`}
-        style={{ marginTop: "calc(var(--ann-bar-h) + 40px)" }} /* announcement bar + promo bar */
+        style={{ 
+          top: 0,
+          marginTop: "calc(var(--ann-bar-h) + var(--promo-bar-h))" 
+        }} /* announcement bar + promo bar */
       >
         <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
           {/* Logo */}

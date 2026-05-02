@@ -1,9 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SPIN_REWARDS, type SpinReward } from "@/lib/data/promotions";
 import SpinCouponModal, { type CouponData } from "@/components/SpinCouponModal";
+
+interface SpinResponse {
+  alreadySpun?: boolean;
+  isWin?: boolean;
+  wheelIndex?: number;
+  couponCode?: string;
+  prizeLabel?: string;
+  issuedAt?: string;
+  expiresAt?: string;
+}
 
 const SEGMENT_COUNT = SPIN_REWARDS.length; // 8
 const SEGMENT_ANGLE = 360 / SEGMENT_COUNT; // 45°
@@ -50,16 +60,13 @@ function markSpunToday(): void {
 }
 
 // ── Target rotation for a given wheel slice index ──────────────────────────────
-// Pointer is at top (12 o'clock). Conic starts at 3 o'clock (CSS default),
-// so the pointer effectively sits at 270° in conic-space.
+// Pointer is at top (12 o'clock). Conic starts at 12 o'clock (CSS default),
+// so the targetAngle effectively sits at 360° (or 0°) in conic-space.
 //
-// IMPORTANT: We must normalise currentRotation before computing the delta so
-// that accumulated rotation from previous spins doesn't displace the landing
-// position. The formula:
-//   1. Convert currentRotation to its visual equivalent (mod 360).
-//   2. Find the desired visual angle for the target slice (targetAngle).
-//   3. Compute the *forward* delta to reach targetAngle from the current angle.
-//   4. Add random full rotations on top to make the wheel spin visibly.
+// 1. Convert currentRotation to its visual equivalent (mod 360).
+// 2. Find the desired visual angle for the target slice (targetAngle).
+// 3. Compute the forward delta to reach targetAngle from the current angle.
+// 4. Add random full rotations on top to make the wheel spin visibly.
 function targetRotationForIndex(
   sliceIndex: number,
   currentRotation: number
@@ -67,12 +74,12 @@ function targetRotationForIndex(
   // Centre of the target slice in conic-space (from top, clockwise)
   const segmentCenter = sliceIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
   // Visual angle (in CSS transform-space) where that slice sits under the pointer
-  const targetAngle   = (270 - segmentCenter + 360) % 360;
+  const targetAngle   = (360 - segmentCenter) % 360;
   // Where the wheel visually is right now (0–359°)
   const currentAngle  = ((currentRotation % 360) + 360) % 360;
   // How much we need to rotate forward to reach targetAngle (always positive)
   const delta = ((targetAngle - currentAngle) + 360) % 360 || 360;
-  // Add 5–8 full spins so the animation is long enough to feel exciting
+  // Add 5–8 full spins
   const extraSpins = 5 + Math.floor(Math.random() * 4);
   return currentRotation + extraSpins * 360 + delta;
 }
@@ -111,57 +118,62 @@ export default function SpinWheel() {
     setError(null);
     setSpinning(true);
 
+    let targetIndex = 1; // Default to TRY_AGAIN (index 1)
+    let spinData: SpinResponse | null = null;
+
     try {
       const token = getOrCreateToken();
-
       const res = await fetch("/api/spin", {
         method: "POST",
         headers: { "x-session-token": token },
       });
 
-      if (!res.ok) throw new Error("Server error");
-
-      const data = await res.json();
-
-      // Server says already spun (e.g. localStorage cleared but server knows)
-      if (data.alreadySpun) {
-        markSpunToday();
-        setAlreadySpun(true);
-        setSpinning(false);
-        return;
-      }
-
-      // If no win, always land on TRY_AGAIN (index 1) — never on a prize slice
-      const TRY_AGAIN_INDEX = 1;
-      const wheelIndex: number = data.isWin ? (data.wheelIndex ?? TRY_AGAIN_INDEX) : TRY_AGAIN_INDEX;
-      const sliceReward = SPIN_REWARDS[wheelIndex];
-
-      // Compute final rotation and animate
-      const finalRotation = targetRotationForIndex(wheelIndex, totalRotation);
-      setTotalRotation(finalRotation);
-
-      // Wait for animation (4 s) then show result
-      setTimeout(() => {
-        setSpinning(false);
-        setResult(sliceReward);
-        markSpunToday();
-        setAlreadySpun(true);
-
-        if (data.isWin && data.couponCode) {
-          setCoupon({
-            prizeLabel: data.prizeLabel,
-            couponCode: data.couponCode,
-            issuedAt:   data.issuedAt,
-            expiresAt:  data.expiresAt,
-          });
-          // Short delay so the wheel result renders before coupon takes over
-          setTimeout(() => setShowCoupon(true), 900);
+      if (res.ok) {
+        spinData = await res.json();
+        
+        // Handle server-side duplicate check
+        if (spinData?.alreadySpun) {
+          markSpunToday();
+          setAlreadySpun(true);
+          setSpinning(false);
+          return;
         }
-      }, 4200);
-    } catch {
-      setSpinning(false);
-      setError("Something went wrong. Please try again.");
+
+        // Determine landing index
+        if (spinData?.isWin) {
+          targetIndex = spinData.wheelIndex ?? 1;
+        }
+      }
+    } catch (err) {
+      console.error("[SpinWheel] API fail, falling back to lose state:", err);
+      // We continue to spin to TRY_AGAIN instead of failing
     }
+
+    // Capture the slice reward before starting animation
+    const sliceReward = SPIN_REWARDS[targetIndex];
+
+    // Compute final rotation and animate
+    const finalRotation = targetRotationForIndex(targetIndex, totalRotation);
+    setTotalRotation(finalRotation);
+
+    // Wait for animation (4 s) then show result
+    setTimeout(() => {
+      setSpinning(false);
+      setResult(sliceReward);
+      markSpunToday();
+      setAlreadySpun(true);
+
+      // If we actually had a win from the API, show the coupon
+      if (spinData?.isWin && spinData?.couponCode) {
+        setCoupon({
+          prizeLabel: spinData.prizeLabel || "",
+          couponCode: spinData.couponCode,
+          issuedAt:   spinData.issuedAt || "",
+          expiresAt:  spinData.expiresAt || "",
+        });
+        setTimeout(() => setShowCoupon(true), 900);
+      }
+    }, 4200);
   }
 
 

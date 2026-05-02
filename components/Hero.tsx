@@ -14,6 +14,11 @@ const CYCLING_PHRASES = [
   "Craft Cocktails.",
   "Expert Catering.",
   "Dine-In Magic.",
+  "The Legendary Mandi.",
+  "Dangerous Biryanis.",
+  "Chef-Crafted Magic.",
+  "Your Cravings, Conquered.",
+  "Boldly Authentic.",
 ];
 
 const bgImages = [
@@ -37,7 +42,7 @@ export default function Hero() {
   useEffect(() => {
     const timer = setInterval(() => {
       setPhraseIndex((prev) => (prev + 1) % CYCLING_PHRASES.length);
-    }, 2800);
+    }, 4500);
     return () => clearInterval(timer);
   }, []);
 

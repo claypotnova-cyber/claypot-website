@@ -85,7 +85,7 @@ export default function FeaturedDishes() {
           {dishes.map((dish, i) => {
             const imgSrc =
               dish.image || PLACEHOLDER_IMAGES[dish.category] || "/images/dish-butter-chicken.png";
-            const primaryDietary = dish.dietary[0];
+            const primaryDietary = dish.dietary?.[0];
             const dietaryStyle = primaryDietary ? DIETARY_COLORS[primaryDietary] : null;
 
             return (

@@ -72,7 +72,9 @@
   }
 
   /* Announcement bar */
-  --ann-bar-h: 44px;
+  --ann-bar-h: 40px;
+  --promo-bar-h: 40px;
+
   @keyframes marquee-scroll {
     0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
@@ -144,7 +146,7 @@ h1, h2, h3, h4, h5, h6 {
   width: max-content;
   white-space: nowrap;
   will-change: transform;
-  animation: marquee-scroll 55s linear infinite;
+  animation: marquee-scroll 160s linear infinite;
 }
 
 /* Pause on hover — desktop only */
@@ -156,13 +158,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .announcement-content {
   display: inline-block;
-  padding-right: 0;
+  padding-right: 2rem;       /* Gap between repetitions */
   font-size: 0.875rem;       /* 14px */
   font-weight: 700;
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: var(--font-inter);
   color: #FFF8F1;
-  letter-spacing: 0.02em;
-  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: var(--ann-bar-h);
 }
 
 /* Slightly larger on wider screens */

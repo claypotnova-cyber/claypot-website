@@ -144,8 +144,8 @@ function ComboCard({ preset, active }: { preset: ComboPreset; active: boolean })
 }
 
 export default function ComboBuilder() {
-  const [activeId, setActiveId] = useState(COMBO_PRESETS[0].id);
-  const activePreset = COMBO_PRESETS.find((p) => p.id === activeId)!;
+  const [activeId, setActiveId] = useState(COMBO_PRESETS?.[0]?.id || "");
+  const activePreset = COMBO_PRESETS?.find((p) => p.id === activeId);
 
   return (
     <section
@@ -217,7 +217,11 @@ export default function ComboBuilder() {
               boxShadow: "0 8px 40px rgba(0,0,0,0.07)",
             }}
           >
-            <ComboCard preset={activePreset} active={true} />
+            {activePreset ? (
+              <ComboCard preset={activePreset} active={true} />
+            ) : (
+              <p className="text-center text-maroon/40 py-10">No meal ideas available at the moment.</p>
+            )}
           </div>
         </AnimatedSection>
 

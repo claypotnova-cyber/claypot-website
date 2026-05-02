@@ -33,10 +33,11 @@ export const runtime = "nodejs";
 // Module-level client is reused across warm Lambda invocations
 let _redis: Redis | null = null;
 
-function getRedis(): Redis {
+function getRedis(): Redis | null {
+  if (!process.env.REDIS_URL) return null;
   if (!_redis) {
-    _redis = new Redis(process.env.REDIS_URL!, {
-      tls: process.env.REDIS_URL?.startsWith("rediss://")
+    _redis = new Redis(process.env.REDIS_URL, {
+      tls: process.env.REDIS_URL.startsWith("rediss://")
         ? { rejectUnauthorized: false }
         : undefined,
       maxRetriesPerRequest: 3,
@@ -76,9 +77,19 @@ function generateCouponCode(prizeKey: string): string {
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const redis = getRedis();
+    const day = getBusinessDay();
     const sessionToken =
       request.headers.get("x-session-token")?.trim() || "anonymous";
-    const day = getBusinessDay();
+
+    // ── 0. Handle Redis-less environments (Local Dev fallback) ─────────────────
+    if (!redis) {
+      console.warn("[spin] REDIS_URL not found. Falling back to TRY_AGAIN.");
+      return NextResponse.json({
+        isWin:      false,
+        prizeKey:   "TRY_AGAIN",
+        wheelIndex: PRIZE_WHEEL_INDEX["TRY_AGAIN"],
+      });
+    }
 
     // ── 1. Duplicate spin guard ──────────────────────────────────────────────
     const spinKey = `spin:done:${day}:${sessionToken}`;

@@ -22,10 +22,11 @@ export default function PromoBar() {
         top: "var(--ann-bar-h)",
         left: 0,
         right: 0,
+        height: "var(--promo-bar-h)",
         background: "linear-gradient(90deg, #651F12 0%, #8B2A18 50%, #651F12 100%)",
       }}
     >
-      <div className="h-10 flex items-center justify-center px-4 relative">
+      <div className="h-full flex items-center justify-center px-4 relative">
         {/* Shimmer accent */}
         <div
           className="absolute inset-0 opacity-20"
