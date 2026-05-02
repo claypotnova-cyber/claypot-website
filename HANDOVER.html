@@ -2,124 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Claypot Website Handover</title>
+    <title>Claypot Handover</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 40px auto; padding: 20px; }
-        h1 { color: #2c3e50; border-bottom: 2px solid #2c3e50; padding-bottom: 10px; }
-        h2 { color: #2980b9; margin-top: 30px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        h3 { color: #16a085; }
+        body { font-family: sans-serif; line-height: 1.5; color: #333; max-width: 700px; margin: 40px auto; }
+        h1 { border-bottom: 2px solid #333; }
         table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #f8f9fa; color: #2c3e50; }
-        code { background-color: #f4f4f4; padding: 2px 5px; border-radius: 3px; font-family: Consolas, monospace; }
-        pre { background-color: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
-        .alert { background-color: #fff3cd; border-left: 5px solid #ffc107; padding: 15px; margin: 20px 0; }
-        .status { color: #27ae60; font-weight: bold; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f4f4f4; }
+        .box { background: #eee; padding: 15px; border-radius: 5px; margin: 20px 0; }
     </style>
 </head>
 <body>
-    <h1>Technical Handover: Claypot Indian Bar & Restaurant</h1>
-    <p>This document contains all necessary information for the technical handover of the Claypot website.</p>
+    <h1>Claypot Website Handover</h1>
+    
+    <div class="box">
+        <strong>Primary Email:</strong> claypotnova@gmail.com<br>
+        <strong>Master Password:</strong> ****
+    </div>
 
-    <h2>1. Project Overview</h2>
-    <p>A premium, responsive web application built with <strong>Next.js</strong>, <strong>TypeScript</strong>, and <strong>Tailwind CSS</strong>.</p>
+    <h2>1. Account Directory</h2>
+    <table>
+        <tr><th>Service</th><th>Purpose</th><th>URL</th></tr>
+        <tr><td>Wix</td><td>Domain</td><td>wix.com</td></tr>
+        <tr><td>GitHub</td><td>Code</td><td>github.com/claypotnova-cyber/claypot-website</td></tr>
+        <tr><td>Vercel</td><td>Hosting</td><td>vercel.com</td></tr>
+        <tr><td>Upstash</td><td>Database</td><td>console.upstash.com</td></tr>
+        <tr><td>Resend</td><td>Email</td><td>resend.com</td></tr>
+    </table>
 
-    <h2>2. Getting Started (Local Development)</h2>
-    <pre><code>git clone https://github.com/claypotnova-cyber/claypot-website
-npm install
-npm run dev</code></pre>
-
-    <h2>3. Deployment (Vercel)</h2>
-    <ol>
-        <li>Connect GitHub to Vercel.</li>
-        <li>Add Environment Variables (<code>REDIS_URL</code>, <code>RESEND_API_KEY</code>).</li>
-        <li>Deploy from <code>main</code> branch.</li>
-    </ol>
-
-    <h2>4. How to Make Changes</h2>
+    <h2>2. Key Links</h2>
     <ul>
-        <li><strong>Menu</strong>: Edit <code>lib/data/menu.ts</code></li>
-        <li><strong>Promotions</strong>: Edit <code>lib/data/promotions.ts</code></li>
-        <li><strong>Announcements</strong>: Edit <code>components/AnnouncementBar.tsx</code></li>
+        <li><strong>Main Website:</strong> https://www.claypotva.com</li>
+        <li><strong>Order Online:</strong> https://order.toasttab.com/online/clay-pot-3065-centerville-rd-ste-g</li>
+        <li><strong>Google Maps:</strong> https://maps.app.goo.gl/ArpMFKLvrPVJRpuNA</li>
     </ul>
 
-    <h2>5. Account & Credential Directory</h2>
-    <div class="alert">
-        <strong>Primary Account Email:</strong> claypotnova@gmail.com <br>
-        <strong>Master Password:</strong> <code>****</code>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Service</th>
-                <th>URL</th>
-                <th>Login Email</th>
-                <th>Password / Access</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>GitHub</strong></td>
-                <td>github.com/claypotnova-cyber/claypot-website</td>
-                <td>claypotnova@gmail.com</td>
-                <td>****</td>
-            </tr>
-            <tr>
-                <td><strong>Vercel</strong></td>
-                <td>vercel.com/dashboard</td>
-                <td>claypotnova@gmail.com</td>
-                <td>[SSO via GitHub]</td>
-            </tr>
-            <tr>
-                <td><strong>Upstash</strong></td>
-                <td>console.upstash.com</td>
-                <td>claypotnova@gmail.com</td>
-                <td>****</td>
-            </tr>
-            <tr>
-                <td><strong>Resend</strong></td>
-                <td>resend.com/overview</td>
-                <td>claypotnova@gmail.com</td>
-                <td>****</td>
-            </tr>
-            <tr>
-                <td><strong>Wix</strong></td>
-                <td>wix.com</td>
-                <td>claypotnova@gmail.com</td>
-                <td>****</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="alert">
-        <strong>IMPORTANT:</strong> API Keys are already configured in Vercel. Keep them private.
-    </div>
-
-    <h2>6. Official URLs & Social Media</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Type</th>
-                <th>URL</th>
-                <th>Access / Login</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td><strong>Main Website</strong></td><td>https://www.claypotva.com</td><td>Public</td></tr>
-            <tr><td><strong>Online Ordering</strong></td><td>https://order.toasttab.com/online/clay-pot-3065-centerville-rd-ste-g</td><td>Toast Admin</td></tr>
-            <tr><td><strong>Google Business</strong></td><td>https://g.page/claypot-herndon</td><td>claypotnova@gmail.com</td></tr>
-            <tr><td><strong>Google Maps</strong></td><td>https://maps.app.goo.gl/ArpMFKLvrPVJRpuNA</td><td>Public</td></tr>
-            <tr><td><strong>Instagram</strong></td><td>instagram.com/claypotva</td><td>claypotnova@gmail.com / ****</td></tr>
-            <tr><td><strong>TikTok</strong></td><td>tiktok.com/@claypotva</td><td>claypotnova@gmail.com / ****</td></tr>
-            <tr><td><strong>Snapchat</strong></td><td>snapchat.com/add/claypotva</td><td>claypotnova@gmail.com / ****</td></tr>
-            <tr><td><strong>Facebook</strong></td><td>facebook.com/claypotva</td><td>Meta Business Suite</td></tr>
-            <tr><td><strong>Yelp</strong></td><td>yelp.com/biz/clay-pot-herndon</td><td>Business Owner login</td></tr>
-        </tbody>
-    </table>
+    <h2>3. Social Media</h2>
+    <ul>
+        <li><strong>Instagram:</strong> instagram.com/claypotva</li>
+        <li><strong>TikTok:</strong> tiktok.com/@claypotva</li>
+        <li><strong>Facebook:</strong> facebook.com/claypotva</li>
+    </ul>
 
     <hr>
-    <p><strong>Handover Date:</strong> May 2026</p>
-    <p><strong>Status:</strong> <span class="status">Production Ready ✅</span></p>
+    <p><strong>Status:</strong> Production Ready ✅</p>
 </body>
 </html>
