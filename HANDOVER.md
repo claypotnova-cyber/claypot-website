@@ -115,8 +115,9 @@ Menu data is stored in a structured format for easy updates without touching Rea
 | Type | URL |
 | :--- | :--- |
 | **Main Website** | `https://www.claypotva.com` |
-| **Online Ordering** | `https://order.toasttab.com/online/clay-pot-3065-centerville-rd-ste-g` |
+| **Online Ordering (Toast)** | `https://order.toasttab.com/online/clay-pot-3065-centerville-rd-ste-g` |
 | **Google Maps** | `https://maps.app.goo.gl/ArpMFKLvrPVJRpuNA` |
+| **Google Business Page** | `https://g.page/claypot-herndon` |
 
 ### Social Media Presence
 - **Instagram**: `https://instagram.com/claypotva` (Login: claypotnova@gmail.com / PW: ****)
