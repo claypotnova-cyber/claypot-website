@@ -8,18 +8,18 @@
 ## 1. Account Directory
 | Service | Purpose | URL |
 | :--- | :--- | :--- |
-| **Wix** | Domain Management | `wix.com` |
-| **GitHub** | Source Code | `github.com/claypotnova-cyber/claypot-website` |
-| **Vercel** | Live Hosting | `vercel.com` |
-| **Upstash** | Spin Wheel Database | `console.upstash.com` |
-| **Resend** | Email Service | `resend.com` |
+| **Wix** | Domain Management | [wix.com](https://wix.com) |
+| **GitHub** | Source Code | [github.com/claypotnova-cyber/claypot-website](https://github.com/claypotnova-cyber/claypot-website) |
+| **Vercel** | Live Hosting | [vercel.com](https://vercel.com) |
+| **Upstash** | Spin Wheel Database | [console.upstash.com](https://console.upstash.com) |
+| **Resend** | Email Service | [resend.com](https://resend.com) |
 
 ---
 
 ## 2. Key Website Links
-*   **Main Website**: `https://www.claypotva.com`
-*   **Order Online**: `https://order.toasttab.com/online/clay-pot-3065-centerville-rd-ste-g`
-*   **Google Maps**: `https://maps.app.goo.gl/ArpMFKLvrPVJRpuNA`
+*   **Main Website**: [claypotva.com](https://www.claypotva.com)
+*   **Order Online**: [Toast Online Ordering](https://order.toasttab.com/online/clay-pot-3065-centerville-rd-ste-g)
+*   **Google Maps**: [View on Maps](https://maps.app.goo.gl/ArpMFKLvrPVJRpuNA)
 
 ---
 
