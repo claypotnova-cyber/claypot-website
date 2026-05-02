@@ -104,6 +104,7 @@ Menu data is stored in a structured format for easy updates without touching Rea
 | **Vercel** | Hosting & CI/CD | `https://vercel.com/dashboard` | claypotnova@gmail.com | [SSO via GitHub] |
 | **Upstash** | Redis (Spin Wheel) | `https://console.upstash.com/` | claypotnova@gmail.com | **** |
 | **Resend** | Email Service | `https://resend.com/overview` | claypotnova@gmail.com | **** |
+| **Wix** | Domain Registrar | `https://wix.com` | claypotnova@gmail.com | **** |
 
 ### API Keys (Sensitive)
 > [!IMPORTANT]
