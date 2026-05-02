@@ -93,15 +93,21 @@ Menu data is stored in a structured format for easy updates without touching Rea
 
 ## 7. Account & Credential Directory
 
-Below is a directory of the accounts and URLs associated with this project.
+Below is a directory of the accounts, URLs, and access credentials associated with this project.
 
-### Core Infrastructure
-| Service | Purpose | URL |
-| :--- | :--- | :--- |
-| **GitHub** | Source Code Repository | `https://github.com/claypotnova-cyber/claypot-website` |
-| **Vercel** | Production Hosting & CI/CD | `https://vercel.com/dashboard` |
-| **Upstash** | Redis Database (Spin Wheel) | `https://console.upstash.com/` |
-| **Resend** | Email Delivery Service | `https://resend.com/overview` |
+### Core Infrastructure & Logins
+| Service | Purpose | URL | Login Email | Password / Access |
+| :--- | :--- | :--- | :--- | :--- |
+| **GitHub** | Source Code | `https://github.com/claypotnova-cyber/claypot-website` | [Your Email] | [Managed via GitHub] |
+| **Vercel** | Hosting & CI/CD | `https://vercel.com/dashboard` | [Your Email] | [SSO via GitHub] |
+| **Upstash** | Redis (Spin Wheel) | `https://console.upstash.com/` | [Your Email] | [Shared/Admin PW] |
+| **Resend** | Email Service | `https://resend.com/overview` | [Your Email] | [Shared/Admin PW] |
+
+### API Keys (Sensitive)
+> [!IMPORTANT]
+> These keys must be kept private. They are already configured in Vercel's Environment Variables.
+- **REDIS_URL**: Located in Upstash Console > Database > Connect.
+- **RESEND_API_KEY**: Located in Resend > API Keys.
 
 ### Official URLs
 | Type | URL |
@@ -111,9 +117,9 @@ Below is a directory of the accounts and URLs associated with this project.
 | **Google Maps** | `https://maps.app.goo.gl/ArpMFKLvrPVJRpuNA` |
 
 ### Social Media Presence
-- **Instagram**: `https://instagram.com/claypotva`
-- **Facebook**: `https://facebook.com/claypotva`
-- **TikTok**: `https://tiktok.com/@claypotva`
+- **Instagram**: `https://instagram.com/claypotva` (Login: [Email/Phone] / PW: [Password])
+- **Facebook**: `https://facebook.com/claypotva` (Admin access via Meta Business Suite)
+- **TikTok**: `https://tiktok.com/@claypotva` (Login: [Email/Phone] / PW: [Password])
 - **Snapchat**: `https://snapchat.com/add/claypotva`
 - **Yelp**: `https://yelp.com/biz/clay-pot-herndon`
 
