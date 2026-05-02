@@ -56,5 +56,38 @@
 > All accounts are configured and the site is **Production Ready**.
 
 ---
-**Status**: Production Ready ✅  
-**Date**: May 2026
+
+## 4. Local Development Setup
+Follow these steps to run the project on your own computer:
+
+### 1. Clone the Project
+```bash
+git clone https://github.com/claypotnova-cyber/claypot-website.git
+cd claypot-website
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Set Up Environment Variables
+Create a file named `.env.local` in the root directory and add:
+```env
+REDIS_URL=your_upstash_redis_url
+RESEND_API_KEY=your_resend_api_key
+```
+
+### 4. Run Locally
+```bash
+npm run dev
+```
+The site will be available at `http://localhost:3000`.
+
+### 5. Build for Production
+To verify the build before deploying:
+```bash
+npm run build
+```
+
+---
