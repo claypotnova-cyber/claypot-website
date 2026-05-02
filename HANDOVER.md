@@ -91,7 +91,40 @@ Menu data is stored in a structured format for easy updates without touching Rea
 - **Production Build**: Run `npm run build` to verify the site is ready for deployment.
 - **Optimization**: All images should be placed in the `public/images` folder and served via the Next.js `<Image />` component for automatic optimization.
 
+## 7. Account & Credential Directory
+
+Below is a directory of the accounts and URLs associated with this project.
+
+### Core Infrastructure
+| Service | Purpose | URL |
+| :--- | :--- | :--- |
+| **GitHub** | Source Code Repository | `https://github.com/claypotnova-cyber/claypot-website` |
+| **Vercel** | Production Hosting & CI/CD | `https://vercel.com/dashboard` |
+| **Upstash** | Redis Database (Spin Wheel) | `https://console.upstash.com/` |
+| **Resend** | Email Delivery Service | `https://resend.com/overview` |
+
+### Official URLs
+| Type | URL |
+| :--- | :--- |
+| **Main Website** | `https://www.claypotva.com` |
+| **Online Ordering** | `https://order.toasttab.com/online/clay-pot-3065-centerville-rd-ste-g` |
+| **Google Maps** | `https://maps.app.goo.gl/ArpMFKLvrPVJRpuNA` |
+
+### Social Media Presence
+- **Instagram**: `https://instagram.com/claypotva`
+- **Facebook**: `https://facebook.com/claypotva`
+- **TikTok**: `https://tiktok.com/@claypotva`
+- **Snapchat**: `https://snapchat.com/add/claypotva`
+- **Yelp**: `https://yelp.com/biz/clay-pot-herndon`
+
 ---
 
-**Handover Date**: May 2026
+## 8. Summary of Handover Assets
+- ✅ **Clean Code**: Pushed to GitHub `main` branch.
+- ✅ **Documentation**: This `HANDOVER.md` file.
+- ✅ **Build Status**: Verified `npm run build` pass.
+- ✅ **SEO & Analytics**: Metadata and semantic tags implemented.
+
+---
+**Handover Date**: May 2026  
 **Status**: Production Ready ✅
