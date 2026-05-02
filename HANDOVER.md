@@ -93,15 +93,17 @@ Menu data is stored in a structured format for easy updates without touching Rea
 
 ## 7. Account & Credential Directory
 
-Below is a directory of the accounts, URLs, and access credentials associated with this project.
+> [!NOTE]
+> All primary accounts listed below are associated with **claypotnova@gmail.com**.  
+> **Master Password**: `****` (Please update/change after handover).
 
 ### Core Infrastructure & Logins
 | Service | Purpose | URL | Login Email | Password / Access |
 | :--- | :--- | :--- | :--- | :--- |
-| **GitHub** | Source Code | `https://github.com/claypotnova-cyber/claypot-website` | [Your Email] | [Managed via GitHub] |
-| **Vercel** | Hosting & CI/CD | `https://vercel.com/dashboard` | [Your Email] | [SSO via GitHub] |
-| **Upstash** | Redis (Spin Wheel) | `https://console.upstash.com/` | [Your Email] | [Shared/Admin PW] |
-| **Resend** | Email Service | `https://resend.com/overview` | [Your Email] | [Shared/Admin PW] |
+| **GitHub** | Source Code | `https://github.com/claypotnova-cyber/claypot-website` | claypotnova@gmail.com | **** |
+| **Vercel** | Hosting & CI/CD | `https://vercel.com/dashboard` | claypotnova@gmail.com | [SSO via GitHub] |
+| **Upstash** | Redis (Spin Wheel) | `https://console.upstash.com/` | claypotnova@gmail.com | **** |
+| **Resend** | Email Service | `https://resend.com/overview` | claypotnova@gmail.com | **** |
 
 ### API Keys (Sensitive)
 > [!IMPORTANT]
@@ -117,9 +119,9 @@ Below is a directory of the accounts, URLs, and access credentials associated wi
 | **Google Maps** | `https://maps.app.goo.gl/ArpMFKLvrPVJRpuNA` |
 
 ### Social Media Presence
-- **Instagram**: `https://instagram.com/claypotva` (Login: [Email/Phone] / PW: [Password])
+- **Instagram**: `https://instagram.com/claypotva` (Login: claypotnova@gmail.com / PW: ****)
 - **Facebook**: `https://facebook.com/claypotva` (Admin access via Meta Business Suite)
-- **TikTok**: `https://tiktok.com/@claypotva` (Login: [Email/Phone] / PW: [Password])
+- **TikTok**: `https://tiktok.com/@claypotva` (Login: claypotnova@gmail.com / PW: ****)
 - **Snapchat**: `https://snapchat.com/add/claypotva`
 - **Yelp**: `https://yelp.com/biz/clay-pot-herndon`
 
