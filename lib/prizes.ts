@@ -12,10 +12,15 @@
 /** Days a winning coupon stays valid */
 export const COUPON_VALIDITY_DAYS = 7;
 
+/** Maximum cumulative total discount awarded per calendar day across all users ($100) */
+export const DAILY_MAX_DISCOUNT_AMOUNT = 100;
+
+/** Cart threshold separating $5 OFF (<= $50) and $10 OFF (> $50) */
+export const CART_THRESHOLD_AMOUNT = 50;
+
 /**
- * Probability (0–1) of a spin actually being a winner when the daily pool
- * still has prizes remaining. 0.30 = 30% chance → keeps it exciting but
- * not every early spin wins.
+ * Probability (0–1) of a spin actually being a winner when the daily limit
+ * has not been reached. 0.30 = 30% chance.
  */
 export const WIN_PROBABILITY = 0.3;
 
@@ -33,14 +38,26 @@ export type PrizeKey =
 
 /** Human-readable label for each prize key */
 export const PRIZE_LABELS: Record<PrizeKey, string> = {
-  NAAN:      "Free Garlic Naan",
-  LASSI:     "Free Lassi",
-  MLASSI:    "Free Mango Lassi",
-  DESSERT:   "Free Dessert",
-  "5OFF":    "$5 Off Pickup",
-  "10OFF":   "10% Off Pickup",
-  BOGO:      "Buy 1 Get 1 Half Off",
+  NAAN:      "$5 OFF",
+  LASSI:     "$5 OFF",
+  MLASSI:    "$10 OFF",
+  DESSERT:   "$5 OFF",
+  "5OFF":    "$5 OFF",
+  "10OFF":   "$10 OFF",
+  BOGO:      "$10 OFF",
   TRY_AGAIN: "Try Again",
+};
+
+/** Dollar value for monetary discount prizes */
+export const PRIZE_DISCOUNT_VALUES: Record<PrizeKey, number> = {
+  NAAN:      0,
+  LASSI:     0,
+  MLASSI:    0,
+  DESSERT:   0,
+  "5OFF":    5,
+  "10OFF":   10,
+  BOGO:      0,
+  TRY_AGAIN: 0,
 };
 
 // ── Daily prize pool ───────────────────────────────────────────────────────────

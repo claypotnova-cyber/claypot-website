@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SPIN_REWARDS, type SpinReward } from "@/lib/data/promotions";
+import { PRIZE_WHEEL_INDEX } from "@/lib/prizes";
 import SpinCouponModal, { type CouponData } from "@/components/SpinCouponModal";
 
 interface SpinResponse {
@@ -123,9 +124,13 @@ export default function SpinWheel() {
 
     try {
       const token = getOrCreateToken();
+
       const res = await fetch("/api/spin", {
         method: "POST",
-        headers: { "x-session-token": token },
+        headers: {
+          "Content-Type": "application/json",
+          "x-session-token": token,
+        },
       });
 
       if (res.ok) {
@@ -142,6 +147,8 @@ export default function SpinWheel() {
         // Determine landing index
         if (spinData?.isWin) {
           targetIndex = spinData.wheelIndex ?? 1;
+        } else {
+          targetIndex = PRIZE_WHEEL_INDEX["TRY_AGAIN"];
         }
       }
     } catch (err) {

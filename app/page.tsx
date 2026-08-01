@@ -51,7 +51,7 @@ export default function HomePage() {
       {/* 10. Visit Us */}
       <VisitSection />
 
-      {/* Floating spin wheel (dine-in & pickup rewards only) */}
+      {/* Floating Spin Wheel */}
       <SpinWheel />
     </>
   );
